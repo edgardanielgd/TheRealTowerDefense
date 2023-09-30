@@ -12,13 +12,12 @@ public class Enemy : MonoBehaviour
     // With angle, speed and reference tower dimensions
     // it should be enough to calculate this object's
     // position
-    public float angle;
+    public float angle = 0;
     private float angularSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
-        angle = 0;
         angularSpeed = DEFAULT_ANGULAR_SPEED;
     }
 
@@ -28,7 +27,7 @@ public class Enemy : MonoBehaviour
         // print("Starts update");
         // Apply transformation to next position
         float radius = (float)(
-            parent.getRadiusOffset() - 
+            parent.getRadiusOffset() -
             (parent.getPathWidth() / Mathf.PI) * angle
         );
         float elevation_factor = parent.getHeight() / (float)(parent.getLaps() * 2 * Math.PI);
@@ -59,4 +58,5 @@ public class Enemy : MonoBehaviour
 
     // Getters and setters for this object
     public void setParentTower( Tower tower ) { this.parent = tower; }
+    public void setAngle(  float angle ) { this.angle = angle; }
 }

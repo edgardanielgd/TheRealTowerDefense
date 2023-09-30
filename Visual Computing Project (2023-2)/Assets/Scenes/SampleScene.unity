@@ -265,8 +265,6 @@ MonoBehaviour:
   enemy1Pattern: {fileID: -4381327218467496874, guid: aa40d346b4d480244882fb358b6b43f5, type: 3}
   towerPattern: {fileID: 3969050176962940791, guid: 3c392d6aace9f5d42a6215b873e67621, type: 3}
   targetCamera: {fileID: 2073018726}
-  cameraPosRadius: 0
-  cameraPosAngle: 0
 --- !u!114 &2049855608
 MonoBehaviour:
   m_ObjectHideFlags: 0

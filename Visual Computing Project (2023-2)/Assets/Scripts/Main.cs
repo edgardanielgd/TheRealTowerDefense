@@ -32,18 +32,20 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
         tower.transform.position = new Vector3(0,0,0);
 
         // Create base enemies
         enemies = new ArrayList();
-        for(int i = 0; i < enemy_count; i++)
+        for (int i = 0; i < enemy_count; i++)
         {
             Enemy enemy = Instantiate(enemy1Pattern) as Enemy;
             enemy.setParentTower(tower);
+            enemy.setAngle(-i * Mathf.PI / 8);
 
-            enemies.Add( enemy );
+            enemies.Add(enemy);
         }
 
         // Set initial camera coords based on tower position
