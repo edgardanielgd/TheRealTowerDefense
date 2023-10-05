@@ -49,7 +49,13 @@ public class Enemy : MonoBehaviour
         // Apply transformation to object
         transform.position = new Vector3(x, y, z);
 
-        // TODO: Face always the movement position
+        // Face always the movement vector
+        Vector3 newRotation = new Vector3(
+           transform.rotation.x,
+           transform.rotation.y,
+           transform.rotation.z  
+        );
+        // transform.rotation.SetEulerRotation(newRotation);
 
         // Update angle position
         float delta = Time.deltaTime;

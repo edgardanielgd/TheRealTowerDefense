@@ -210,8 +210,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -500, y: 0, z: -500}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.184466, y: -4.4187946, z: 2.2993}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 277313d4d160ffa46bbd5f6ecba33dad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy1Pattern: {fileID: -4381327218467496874, guid: aa40d346b4d480244882fb358b6b43f5, type: 3}
+  enemy1Pattern: {fileID: 1215583721258512252, guid: a0e28d3f56b411443abab7bd0794793f, type: 3}
   towerPattern: {fileID: 1791385685831724973, guid: 7fe33e98287d41e479b49a4006e0eb47, type: 3}
   targetCamera: {fileID: 2073018726}
 --- !u!114 &2049855608
