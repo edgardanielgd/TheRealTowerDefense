@@ -1,0 +1,4 @@
+Height: 10
+radius: 100
+rad growth (b) = -7.50
+Number of points 48

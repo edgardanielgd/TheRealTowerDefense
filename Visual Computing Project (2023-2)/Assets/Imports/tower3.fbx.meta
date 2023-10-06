@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b8ad1b5ede33944ba67a241c3322981
+guid: 2a83be4024f63a14cb95731d1bce488b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,27 +8,32 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: 1stLevel
-    second: {fileID: 2800000, guid: 4e0f32b32fb71a54db4686ba702efe36, type: 3}
+    second: {fileID: 2800000, guid: 1cfe565815d3a8b478a6b41a3e053ec7, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: 2ndLevel
-    second: {fileID: 2800000, guid: 8567b3239c8283547833fa55b4b86aa5, type: 3}
+    second: {fileID: 2800000, guid: 71dfd6c035540174d8993fb3c2bb0109, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: 3rdLevel
-    second: {fileID: 2800000, guid: 1c583abf7f26cda47af16b3c4869b6de, type: 3}
+    second: {fileID: 2800000, guid: 5701e9360867c7c43b47d45e6a0779a6, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: 4thLevel
-    second: {fileID: 2800000, guid: 38f59515566ece24785f530301cc3547, type: 3}
+    second: {fileID: 2800000, guid: 63ae20908fa9fc249907fe74a5483d5c, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Floor
-    second: {fileID: 2800000, guid: 4c62fdf4fd251a0448d440f62da65ffc, type: 3}
+    second: {fileID: 2800000, guid: 44ca77216b323044fb0a490d0ac85043, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: TowerDoor
+    second: {fileID: 2800000, guid: 668e773e5daa0fb4ba1ed53c676dfc03, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

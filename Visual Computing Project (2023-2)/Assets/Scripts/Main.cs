@@ -9,7 +9,7 @@ public class Main : MonoBehaviour
      * y: Factor for angle changes
      * z: Factor for elevation changes
      * */
-    static Vector3 cameraSpeed = new Vector3(0.05f, 0.01f, 0.05f);
+    static Vector3 cameraSpeed = new Vector3(0.5f, 0.01f, 0.5f);
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
@@ -72,13 +72,13 @@ public class Main : MonoBehaviour
         // Fix position based on constraints
         float totalRadius = tower.getLaps() * tower.getPathWidth();
         if (cameraRadius < totalRadius) { cameraRadius = totalRadius; }
-        else if( cameraRadius > totalRadius + 30 ) { cameraRadius = totalRadius + 30; }
+        else if( cameraRadius > totalRadius + 30  ) { cameraRadius = totalRadius + 30; }
 
         if (cameraAngle < 0) { cameraAngle = 2 * Mathf.PI; }
         else if (cameraAngle > 2 * Mathf.PI ) { cameraAngle = 0; }
 
-        if (cameraElevation < tower.transform.position.z) { 
-            cameraElevation = tower.transform.position.z; 
+        if (cameraElevation < tower.transform.position.z ) { 
+            cameraElevation = tower.transform.position.z ; 
         }
         else if (cameraElevation > tower.transform.position.z + tower.getHeight() * 1.5)
         {
@@ -105,7 +105,7 @@ public class Main : MonoBehaviour
         targetCamera.transform.LookAt(
             new Vector3(
                 tower.transform.position.x,
-                tower.transform.position.y + tower.getHeight() / 2,
+                tower.transform.position.y,
                 tower.transform.position.z
             )
         );

@@ -6,10 +6,11 @@ public class Tower : MonoBehaviour
 {
 
     private readonly float angleOffset = Mathf.PI;
-    private readonly float radiusOffset = 15f;
-    private readonly float pathWidth = 0.92f;
-    private readonly float height = 17.75f;
-    private readonly float laps = 7;
+    private readonly float radiusOffset = 100f;
+    private readonly float pathWidth = 7.5f;
+    private readonly float height = 135f;
+    private readonly float heightOffset = 4.5f;
+    private readonly float laps = 13;
 
     // Start is called before the first frame update
     void Start()
@@ -27,5 +28,7 @@ public class Tower : MonoBehaviour
     public float getAngleOffset() { return angleOffset; }
     public float getPathWidth() { return pathWidth; }
     public float getHeight() { return height; }
+
+    public float getHeightOffset() { return heightOffset; }
     public float getLaps() { return laps; }
 }
