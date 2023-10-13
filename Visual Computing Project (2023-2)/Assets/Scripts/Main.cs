@@ -15,6 +15,7 @@ public class Main : MonoBehaviour
     // are initiallizable (must be public in order to be assignable)
     public Enemy enemy1Pattern;
     public Tower towerPattern;
+    public GameObject ballPattern;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -27,7 +28,7 @@ public class Main : MonoBehaviour
     // Private (non assignable variables)
     private ArrayList enemies;
     private Tower tower;
-    private const int enemy_count = 5;
+    private const int enemy_count = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +37,7 @@ public class Main : MonoBehaviour
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
         tower.transform.position = new Vector3(0,0,0);
+        tower.CalculateDims();
 
         // Create base enemies
         enemies = new ArrayList();
@@ -48,10 +50,12 @@ public class Main : MonoBehaviour
             enemies.Add(enemy);
         }
 
+        var ball = Instantiate(ballPattern);
+        ball.transform.position = new Vector3(0, tower.getHeight() + 1000, 0);
+
         // Set initial camera coords based on tower position
         cameraRadius = tower.getLaps() * tower.getPathWidth() + 100;
 
-        print(tower.getAngleOffset());
         cameraAngle = tower.getAngleOffset();
         cameraElevation = tower.getHeight();
 
@@ -72,17 +76,17 @@ public class Main : MonoBehaviour
         // Fix position based on constraints
         float totalRadius = tower.getLaps() * tower.getPathWidth();
         if (cameraRadius < totalRadius) { cameraRadius = totalRadius; }
-        else if( cameraRadius > totalRadius + 30  ) { cameraRadius = totalRadius + 30; }
+        else if( cameraRadius > totalRadius + 100  ) { cameraRadius = totalRadius + 100; }
 
         if (cameraAngle < 0) { cameraAngle = 2 * Mathf.PI; }
         else if (cameraAngle > 2 * Mathf.PI ) { cameraAngle = 0; }
 
         if (cameraElevation < tower.transform.position.z ) { 
-            cameraElevation = tower.transform.position.z ; 
+            cameraElevation = tower.transform.position.z; 
         }
-        else if (cameraElevation > tower.transform.position.z + tower.getHeight() * 1.5)
+        else if (cameraElevation > tower.transform.position.z + tower.getHeight() * 2.0)
         {
-            cameraElevation = (float)(tower.transform.position.z + tower.getHeight() * 1.5);
+            cameraElevation = (float)(tower.transform.position.z + tower.getHeight() * 2.0);
         }
 
         SetCameraPosition();

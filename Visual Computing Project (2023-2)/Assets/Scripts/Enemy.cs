@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
 {
     // Default angular speed for enemies
     private static float DEFAULT_ANGULAR_SPEED = 0.2f;
+    private static float DEFAULT_FULL_LIFE = 100f;
     private Tower parent;
 
     // With angle, speed and reference tower dimensions
@@ -14,20 +15,21 @@ public class Enemy : MonoBehaviour
     // position
     public float angle = 0;
     private float angularSpeed;
+    private float life;
 
     // Start is called before the first frame update
     void Start()
     {
         angularSpeed = DEFAULT_ANGULAR_SPEED;
+        life = DEFAULT_FULL_LIFE;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // print("Starts update");
         // Apply transformation to next position
         float radius = (float)(
-            parent.getRadiusOffset() - parent.getPathWidth() / (2 * Mathf.PI ) * angle
+            parent.getRadiusOffset() - parent.getPathWidth() / 2 - parent.getPathWidth() / (2 * Mathf.PI ) * angle
         );
         float elevation_factor = parent.getHeight() / (float)(parent.getLaps() * 2 * Math.PI);
 
@@ -46,7 +48,7 @@ public class Enemy : MonoBehaviour
         );
 
         // Apply transformation to object
-        transform.position = new Vector3(x, y, z);
+        transform.position = new Vector3(x, y + 0.02f, z);
 
         // Face always the movement vector
         Vector3 newRotation = new Vector3(
@@ -64,4 +66,14 @@ public class Enemy : MonoBehaviour
     // Getters and setters for this object
     public void setParentTower( Tower tower ) { this.parent = tower; }
     public void setAngle(  float angle ) { this.angle = angle; }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        foreach (ContactPoint contact in collision.contacts)
+        {
+            Debug.DrawRay(contact.point, contact.normal, Color.white);
+        }
+
+        print("ola");
+    }
 }
