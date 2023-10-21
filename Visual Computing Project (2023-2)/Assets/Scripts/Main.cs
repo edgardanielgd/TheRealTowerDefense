@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,10 +34,9 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
-        tower.transform.position = new Vector3(0,0,0);
+        tower.transform.position = new Vector3(0,20,0);
         tower.CalculateDims();
 
         // Create base enemies
@@ -49,9 +49,6 @@ public class Main : MonoBehaviour
 
             enemies.Add(enemy);
         }
-
-        var ball = Instantiate(ballPattern);
-        ball.transform.position = new Vector3(0, tower.getHeight() + 1000, 0);
 
         // Set initial camera coords based on tower position
         cameraRadius = tower.getLaps() * tower.getPathWidth() + 100;
@@ -81,8 +78,8 @@ public class Main : MonoBehaviour
         if (cameraAngle < 0) { cameraAngle = 2 * Mathf.PI; }
         else if (cameraAngle > 2 * Mathf.PI ) { cameraAngle = 0; }
 
-        if (cameraElevation < tower.transform.position.z ) { 
-            cameraElevation = tower.transform.position.z; 
+        if (cameraElevation < tower.transform.position.z + 10 ) { 
+            cameraElevation = tower.transform.position.z + 10; 
         }
         else if (cameraElevation > tower.transform.position.z + tower.getHeight() * 2.0)
         {
@@ -113,5 +110,32 @@ public class Main : MonoBehaviour
                 tower.transform.position.z
             )
         );
+    }
+        
+
+    // Callables from outside
+    public void LaunchRock()
+    {
+        var ball = Instantiate(ballPattern);
+
+        // Spawn rock randomly in the tower ceil
+        float angle = UnityEngine.Random.value * (2 * Mathf.PI * tower.getLaps() - 5) + (2 * Mathf.PI * 5);
+        float radius = (float)(
+            tower.getRadiusOffset() - tower.getPathWidth() / 2 - tower.getPathWidth() / (2 * Mathf.PI) * angle
+        );
+
+        float x = (float)(
+            tower.transform.position.x + radius * Math.Cos(
+                angle + tower.getAngleOffset()
+            )
+        );
+        float z = (float)(
+            tower.transform.position.z + radius * Math.Sin(
+                angle + tower.getAngleOffset()
+            )
+        );
+        float y = tower.getHeight() + 100;
+
+        ball.transform.position = new Vector3(x,y,z);
     }
 }

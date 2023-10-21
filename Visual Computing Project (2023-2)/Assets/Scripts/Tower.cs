@@ -9,7 +9,7 @@ public class Tower : MonoBehaviour
     private float radiusOffset = 0;
     private float pathWidth = 0;
     private float height = 0;
-    private float heightOffset = 0;
+    private float heightOffset = 5;
     private float laps = 12;
 
     // Start is called before the first frame update
@@ -36,13 +36,7 @@ public class Tower : MonoBehaviour
         pathWidth = width;
 
         // Set height attributes
-        height = topReference.y;
-        heightOffset = borderReferenceLeft.y;
-
-        print(radius);
-        print(pathWidth);
-        print(height);
-        print(heightOffset);
+        height = topReference.y;;
     }
 
     // Update is called once per frame
