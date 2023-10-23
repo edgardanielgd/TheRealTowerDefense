@@ -15,9 +15,9 @@ public class Tower : MonoBehaviour
     // Start is called before the first frame update
     public void CalculateDims()
     {
-        var topReference = transform.Find("ReferenceTop").position;
-        var borderReferenceRight = transform.Find("ReferenceBorderRight").position;
-        var borderReferenceLeft = transform.Find("ReferenceBorderLeft").position;
+        var topReference = transform.Find("ReferenceTop").transform.position;
+        var borderReferenceRight = transform.Find("ReferenceBorderRight").transform.position;
+        var borderReferenceLeft = transform.Find("ReferenceBorderLeft").transform.position;
 
         // Find radius offset by distance between both references in XY
         float radius = Mathf.Sqrt(
@@ -36,7 +36,10 @@ public class Tower : MonoBehaviour
         pathWidth = width;
 
         // Set height attributes
-        height = topReference.y;;
+        height = topReference.y - borderReferenceLeft.y;
+
+        print(borderReferenceLeft.y);
+        heightOffset = borderReferenceLeft.y;
     }
 
     // Update is called once per frame

@@ -71,7 +71,7 @@ public class Main : MonoBehaviour
         if (Input.GetKey(KeyCode.Q)) { cameraElevation -= cameraSpeed.z; }
 
         // Fix position based on constraints
-        float totalRadius = tower.getLaps() * tower.getPathWidth();
+        float totalRadius = (tower.getLaps() + 1) * tower.getPathWidth();
         if (cameraRadius < totalRadius) { cameraRadius = totalRadius; }
         else if( cameraRadius > totalRadius + 100  ) { cameraRadius = totalRadius + 100; }
 

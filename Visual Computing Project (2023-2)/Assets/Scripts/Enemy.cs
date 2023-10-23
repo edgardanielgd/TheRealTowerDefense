@@ -44,11 +44,11 @@ public class Enemy : MonoBehaviour
             )
         );
         float y = (float)(
-            parent.transform.position.y + elevation_factor * angle + parent.getHeightOffset()
+            parent.getHeightOffset() + elevation_factor * angle
         );
 
         // Apply transformation to object
-        transform.position = new Vector3(x, y + 0.02f, z);
+        transform.position = new Vector3(x, y, z);
 
         // Face always the movement vector
         Vector3 newRotation = new Vector3(
