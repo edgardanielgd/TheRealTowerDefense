@@ -36,7 +36,7 @@ public class Main : MonoBehaviour
     {
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
-        tower.transform.position = new Vector3(0,20,0);
+        tower.transform.position = new Vector3(0,0,0);
         tower.CalculateDims();
 
         // Create base enemies

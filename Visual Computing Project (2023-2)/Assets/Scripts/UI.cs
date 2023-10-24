@@ -6,6 +6,8 @@ using UnityEngine;
 public class UI : MonoBehaviour {
 
     public Main main;
+
+    private bool inBomb = false;
    
 
     // Start is called before the first frame update
@@ -23,5 +25,19 @@ public class UI : MonoBehaviour {
     public void OnRock()
     {
         main.LaunchRock();
+    }
+
+    public void OnBomb()
+    {
+
+        inBomb = !inBomb;
+
+        if( inBomb)
+        {
+            // main.LaunchBomb();
+        } else
+        {
+            // main.ResetMode();
+        }
     }
 }
