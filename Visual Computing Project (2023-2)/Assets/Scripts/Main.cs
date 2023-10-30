@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class Main : MonoBehaviour
 { 
@@ -17,6 +18,7 @@ public class Main : MonoBehaviour
     public Enemy enemy1Pattern;
     public Tower towerPattern;
     public GameObject ballPattern;
+    public GameObject markerPattern;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -29,7 +31,8 @@ public class Main : MonoBehaviour
     // Private (non assignable variables)
     private ArrayList enemies;
     private Tower tower;
-    private const int enemy_count = 1;
+    private GameObject marker;
+    private const int enemyCount = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -39,9 +42,12 @@ public class Main : MonoBehaviour
         tower.transform.position = new Vector3(0,0,0);
         tower.CalculateDims();
 
+        // Create marker
+        marker = Instantiate(markerPattern) as GameObject;
+
         // Create base enemies
         enemies = new ArrayList();
-        for (int i = 0; i < enemy_count; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
             Enemy enemy = Instantiate(enemy1Pattern) as Enemy;
             enemy.setParentTower(tower);
@@ -62,6 +68,8 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // CAMERA 
+
         // Update camera position
         if (Input.GetKey(KeyCode.W)) { cameraRadius -= cameraSpeed.x; }
         if (Input.GetKey(KeyCode.S)) { cameraRadius += cameraSpeed.x; }
@@ -87,6 +95,19 @@ public class Main : MonoBehaviour
         }
 
         SetCameraPosition();
+
+        // CUSTOM EVENTS
+        Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        var collider = tower.GetComponent<Collider>();
+
+        if( collider.Raycast(ray, out hit, 100000f))
+        {
+            Vector3 point = hit.point;
+            point.y += 2.0f;
+            marker.transform.position = point;
+        }
     }
 
     void SetCameraPosition()
@@ -112,7 +133,6 @@ public class Main : MonoBehaviour
         );
     }
         
-
     // Callables from outside
     public void LaunchRock()
     {
