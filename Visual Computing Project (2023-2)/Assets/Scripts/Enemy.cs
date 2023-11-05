@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Enemy : MonoBehaviour
 {
@@ -64,7 +65,11 @@ public class Enemy : MonoBehaviour
     }
 
     // Getters and setters for this object
-    public void setParentTower( Tower tower ) { this.parent = tower; }
+    public void setParentTower( Tower tower ) { 
+        this.parent = tower;
+
+        
+    }
     public void setAngle(  float angle ) { this.angle = angle; }
 
     void OnCollisionEnter(Collision collision)

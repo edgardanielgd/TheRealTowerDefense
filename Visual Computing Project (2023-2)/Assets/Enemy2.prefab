@@ -490,6 +490,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1055748561691468, guid: 312b31977ed9b2d48a14849ebb8c7fb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1964802957293066324}
+    - targetCorrespondingSourceObject: {fileID: 1055748561691468, guid: 312b31977ed9b2d48a14849ebb8c7fb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1697134599739658091}
   m_SourcePrefab: {fileID: 100100000, guid: 312b31977ed9b2d48a14849ebb8c7fb3, type: 3}
 --- !u!1 &5575810603805749859 stripped
 GameObject:
@@ -535,6 +538,31 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.30719844, y: 0.4689943, z: 0.4619253}
   m_Center: {x: -0.000000005207167, y: 0.008951834, z: 0.22431985}
+--- !u!895512359 &1697134599739658091
+AimConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5577192046280762517}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_RotationAtRest: {x: -90, y: 0, z: -0}
+  m_RotationOffset: {x: -90, y: 0, z: 0}
+  m_AimVector: {x: 0, y: 0, z: 1}
+  m_UpVector: {x: 0, y: 1, z: 0}
+  m_WorldUpVector: {x: 0, y: 1, z: 0}
+  m_WorldUpObject: {fileID: 0}
+  m_UpType: 0
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!4 &5578448099129358189 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4303844821561524, guid: 312b31977ed9b2d48a14849ebb8c7fb3, type: 3}

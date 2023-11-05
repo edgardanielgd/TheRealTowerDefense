@@ -28,6 +28,13 @@ public class Main : MonoBehaviour
     private float cameraAngle;
     private float cameraElevation;
 
+    // Game status boolean variables
+    private Boolean fallingObjectPowerupActive;
+    private Boolean arrowsPowerupActive;
+
+    // Game credits (called rufianes)
+    private float rufianes;
+
     // Private (non assignable variables)
     private ArrayList enemies;
     private Tower tower;
@@ -63,6 +70,11 @@ public class Main : MonoBehaviour
         cameraElevation = tower.getHeight();
 
         SetCameraPosition();
+
+        // Set initial game status
+        fallingObjectPowerupActive = false;
+        arrowsPowerupActive = false;
+        rufianes = 100;
     }
 
     // Update is called once per frame
@@ -97,17 +109,34 @@ public class Main : MonoBehaviour
         SetCameraPosition();
 
         // CUSTOM EVENTS
-        Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        if (fallingObjectPowerupActive || arrowsPowerupActive) {
 
-        var collider = tower.GetComponent<Collider>();
+            marker.SetActive(true);
+            
+            Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-        if( collider.Raycast(ray, out hit, 100000f))
+            var collider = tower.GetComponent<Collider>();
+
+            if (collider.Raycast(ray, out hit, 100000f))
+            {
+                Vector3 point = hit.point;
+                point.y += 2.0f;
+                marker.transform.position = point;
+                
+            }
+
+            // Detect mouse press event
+            if( Input.GetMouseButtonDown(0) )
+            {
+                this.CustomOnMouseDown();
+            }
+
+        } else
         {
-            Vector3 point = hit.point;
-            point.y += 2.0f;
-            marker.transform.position = point;
+            marker.SetActive(false);
         }
+        
     }
 
     void SetCameraPosition()
@@ -132,7 +161,32 @@ public class Main : MonoBehaviour
             )
         );
     }
-        
+
+    public void CustomOnMouseDown()
+    {
+        if (fallingObjectPowerupActive)
+        {
+            // Throw a rock at marker's position in XZ, high in Y
+            var ball = Instantiate(ballPattern);
+
+            ball.transform.position = new Vector3(
+                marker.transform.position.x,
+                100,
+                marker.transform.position.z
+            );
+        }    
+    }
+
+    public float GetRufianes()
+    {
+        return this.rufianes;
+    }
+
+    public void SetRufianes(float rufianes )
+    {
+        this.rufianes = rufianes;
+    }
+
     // Callables from outside
     public void LaunchRock()
     {
@@ -157,5 +211,25 @@ public class Main : MonoBehaviour
         float y = tower.getHeight() + 100;
 
         ball.transform.position = new Vector3(x,y,z);
+    }
+
+    public void StartFallingObjectPowerup()
+    {
+        this.fallingObjectPowerupActive = true;
+    }
+
+    public void StopFallingObjectPowerup()
+    {
+        this.fallingObjectPowerupActive = false;
+    }
+
+    public void StartArrowsPowerup()
+    {
+        this.arrowsPowerupActive = true;
+    }
+
+    public void StopArrowsPowerup()
+    {
+        this.arrowsPowerupActive = false;
     }
 }
