@@ -39,9 +39,10 @@ public class UI : MonoBehaviour {
 
         inBomb = !inBomb;
 
-        if( inBomb)
+        if(inBomb)
         {
            main.StartFallingObjectPowerup();
+           main.StopArrowsPowerup();
         } else
         {
            main.StopFallingObjectPowerup();
@@ -56,6 +57,7 @@ public class UI : MonoBehaviour {
         if (inArrows)
         {
             main.StartArrowsPowerup();
+            main.StopFallingObjectPowerup();
         }
         else
         {

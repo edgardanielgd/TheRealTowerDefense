@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: c5cb7bf7dfc3f3843b924475aab49101, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: bae21a983574f804c926c308f107a6e8, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.29474902, g: 0.16480419, b: 0.03714506, a: 1}
+  m_IndirectSpecularColor: {r: 0.2817234, g: 0.254946, b: 0.2662048, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -320,6 +320,14 @@ PrefabInstance:
     - target: {fileID: 6994939276965097155, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6994939276965097155, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000076293945
+      objectReference: {fileID: 0}
+    - target: {fileID: 6994939276965097155, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.00001335144
       objectReference: {fileID: 0}
     - target: {fileID: 7453010418279727751, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_Pivot.x
@@ -791,7 +799,7 @@ Light:
   m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 2
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -1867,6 +1875,7 @@ MonoBehaviour:
   towerPattern: {fileID: 3881705358140557646, guid: e9418b12b152bc8409a4240d5fef6d60, type: 3}
   ballPattern: {fileID: 388098791581990735, guid: 16929501d39617246846e59624f82350, type: 3}
   markerPattern: {fileID: 933433957520847596, guid: 1143b8540df988d4ea983fcb821f9c6b, type: 3}
+  arrowPattern: {fileID: 7475043664807916551, guid: 5b7c414b4ef32a549bae67af47fdfbe0, type: 3}
   targetCamera: {fileID: 2073018726}
 --- !u!114 &2049855608
 MonoBehaviour:

@@ -12,6 +12,7 @@ public class Main : MonoBehaviour
      * z: Factor for elevation changes
      * */
     static Vector3 cameraSpeed = new Vector3(0.5f, 0.01f, 0.5f);
+    static int arrowsCountPerBatch = 1;
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
@@ -19,6 +20,7 @@ public class Main : MonoBehaviour
     public Tower towerPattern;
     public GameObject ballPattern;
     public GameObject markerPattern;
+    public GameObject arrowPattern;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -164,17 +166,48 @@ public class Main : MonoBehaviour
 
     public void CustomOnMouseDown()
     {
+        Vector3 markerPosition = marker.transform.position;
+        Vector3 cameraPosition = targetCamera.transform.position;
+
         if (fallingObjectPowerupActive)
         {
             // Throw a rock at marker's position in XZ, high in Y
             var ball = Instantiate(ballPattern);
 
             ball.transform.position = new Vector3(
-                marker.transform.position.x,
+                markerPosition.x,
                 100,
-                marker.transform.position.z
+                markerPosition.z
             );
-        }    
+        } else if (arrowsPowerupActive)
+        {
+            for(int i = 0; i < arrowsCountPerBatch; i++)
+            {
+                var arrow = Instantiate(arrowPattern);
+
+                arrow.transform.position = new Vector3(
+                    cameraPosition.x,
+                    cameraPosition.y,
+                    cameraPosition.z
+                );
+
+                var velocity = new Vector3(
+                    markerPosition.x - arrow.transform.position.x,
+                    markerPosition.y - arrow.transform.position.y,
+                    markerPosition.z - arrow.transform.position.z
+                );
+
+                velocity.Normalize();
+
+                velocity *= 50f;
+
+                var arrowBody = arrow.GetComponent<Rigidbody>();
+
+                arrowBody.velocity = velocity;
+
+                arrow.transform.TransformDirection(velocity);
+            }
+        }
     }
 
     public float GetRufianes()
