@@ -22,9 +22,7 @@ public class UI : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        print("ola");
         var text = rufiantesTextObject.GetComponent<TextMeshPro>();
-        print("ola2");
         text.SetText("Rufianes: " + main.GetRufianes());
         print(main.GetRufianes());
     }

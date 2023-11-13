@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Timeline;
 
 public class Enemy : MonoBehaviour
 {
     // Default angular speed for enemies
-    private static float DEFAULT_ANGULAR_SPEED = 0.2f;
+    private static float DEFAULT_ANGULAR_SPEED = 0.1f;
     private static float DEFAULT_FULL_LIFE = 100f;
     private Tower parent;
 
@@ -28,28 +31,43 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float radiusOffset = parent.getRadiusOffset();
+        float pathWidth = parent.getPathWidth();
+        float towerHeight = parent.getHeight();
+        float angleOffset = parent.getAngleOffset();
+        float towerHeightOffset = parent.getHeightOffset();
+        Vector3 towerPos = parent.getPosition();
+
         // Apply transformation to next position
         float radius = (float)(
-            parent.getRadiusOffset() - parent.getPathWidth() / 2 - parent.getPathWidth() / (2 * Mathf.PI ) * angle
+            radiusOffset - pathWidth / 2 - pathWidth * angle / (2 * Mathf.PI ) 
         );
-        float elevation_factor = parent.getHeight() / (float)(parent.getLaps() * 2 * Math.PI);
+        float elevation_factor = towerHeight / (float)(parent.getLaps() * 2 * Math.PI);
 
         float x = (float)(
-            parent.transform.position.x + radius * Math.Cos(
-                angle + parent.getAngleOffset()
-            )
+            towerPos.x + radius * Math.Cos( angle + angleOffset )
         );
         float z = (float)(
-            parent.transform.position.z + radius * Math.Sin(
-                angle + parent.getAngleOffset()
-            )
-        );
-        float y = (float)(
-            parent.getHeightOffset() + elevation_factor * angle
+            towerPos.z + radius * Math.Sin( angle + angleOffset )
         );
 
-        // Apply transformation to object
-        transform.position = new Vector3(x, y, z);
+        Vector3 origin = new Vector3(
+            x, towerPos.y + towerHeight + 10, z 
+        );
+
+        // Intercept origin with tower's mesh
+        var collider = parent.GetComponent<Collider>();
+
+        Ray ray = new Ray(origin, new Vector3(0, -1, 0));
+        RaycastHit hit;
+
+        if (collider.Raycast(ray, out hit, 100000f))
+        {
+            Vector3 point = hit.point;
+
+            // Apply transformation to object
+            transform.position = point;
+        }
 
         // Face always the movement vector
         Vector3 newRotation = new Vector3(
@@ -76,9 +94,8 @@ public class Enemy : MonoBehaviour
     {
         foreach (ContactPoint contact in collision.contacts)
         {
+            print("Ola");
             Debug.DrawRay(contact.point, contact.normal, Color.white);
         }
-
-        print("ola");
     }
 }

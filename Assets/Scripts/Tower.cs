@@ -36,10 +36,8 @@ public class Tower : MonoBehaviour
         pathWidth = width;
 
         // Set height attributes
-        height = topReference.y - borderReferenceLeft.y;
-
-        print(borderReferenceLeft.y);
-        heightOffset = borderReferenceLeft.y;
+        heightOffset = borderReferenceRight.y;
+        height = (borderReferenceLeft.y - borderReferenceRight.y) * laps;
     }
 
     // Update is called once per frame
@@ -53,7 +51,14 @@ public class Tower : MonoBehaviour
     public float getAngleOffset() { return angleOffset; }
     public float getPathWidth() { return pathWidth; }
     public float getHeight() { return height; }
-
     public float getHeightOffset() { return heightOffset; }
     public float getLaps() { return laps; }
+    
+    public Vector3 getPosition()
+    {
+        Vector3 pos = transform.Find("ReferenceTop").transform.position;
+        pos.y = transform.position.y;
+        return pos;
+    }
+
 }

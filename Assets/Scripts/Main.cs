@@ -41,7 +41,7 @@ public class Main : MonoBehaviour
     private ArrayList enemies;
     private Tower tower;
     private GameObject marker;
-    private const int enemyCount = 1;
+    private const int enemyCount = 200;
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +60,7 @@ public class Main : MonoBehaviour
         {
             Enemy enemy = Instantiate(enemy1Pattern) as Enemy;
             enemy.setParentTower(tower);
-            enemy.setAngle(-i * Mathf.PI / 8);
+            enemy.setAngle(i * Mathf.PI / 16);
 
             enemies.Add(enemy);
         }
@@ -143,7 +143,7 @@ public class Main : MonoBehaviour
 
     void SetCameraPosition()
     {
-        // Set camera position based on cylindrical 
+        // Set camera position based on cylindrical coords
         float x = (float)(
             tower.transform.position.x + cameraRadius * Mathf.Cos(cameraAngle)
         );
@@ -158,7 +158,7 @@ public class Main : MonoBehaviour
         targetCamera.transform.LookAt(
             new Vector3(
                 tower.transform.position.x,
-                tower.transform.position.y,
+                tower.transform.position.y + tower.getHeight() / 2,
                 tower.transform.position.z
             )
         );
