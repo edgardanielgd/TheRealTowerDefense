@@ -8,21 +8,19 @@ public class UI : MonoBehaviour {
 
     public Main main;
 
-    private bool inBomb = false;
-    private bool inArrows = false;
-    private GameObject rufiantesTextObject = null;
+    private GameObject rufianeesTextObject = null;
 
     // Start is called before the first frame update
     void Start()
     {
         var creditsPanel = transform.Find("CreditsPanel").gameObject;
-        rufiantesTextObject = creditsPanel.transform.Find("RufianesTitle").gameObject;
+        rufianeesTextObject = creditsPanel.transform.Find("RufianesTitle").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        var text = rufiantesTextObject.GetComponent<TextMeshPro>();
+        var text = rufianeesTextObject.GetComponent<TextMeshPro>();
         text.SetText("Rufianes: " + main.GetRufianes());
         print(main.GetRufianes());
     }
@@ -34,37 +32,16 @@ public class UI : MonoBehaviour {
 
     public void OnFallingObject()
     {
-
-        inBomb = !inBomb;
-
-        if(inBomb)
-        {
-           main.StartFallingObjectPowerup();
-           main.StopArrowsPowerup();
-        } else
-        {
-           main.StopFallingObjectPowerup();
-        }
+        main.SwitchFallingObjectPowerup();
     }
 
     public void OnArrows()
     {
-
-        inArrows = !inArrows;
-
-        if (inArrows)
-        {
-            main.StartArrowsPowerup();
-            main.StopFallingObjectPowerup();
-        }
-        else
-        {
-            main.StopArrowsPowerup();
-        }
+        main.SwitchArrowsPowerup();
     }
 
-    public void OnMouseDown()
+    public void OnHand()
     {
-        print("ola de mar 2");
+        main.SwitchHandPowerup();
     }
 }

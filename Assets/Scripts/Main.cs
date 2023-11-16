@@ -21,6 +21,7 @@ public class Main : MonoBehaviour
     public GameObject ballPattern;
     public GameObject markerPattern;
     public GameObject arrowPattern;
+    public GameObject handPattern;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -33,14 +34,15 @@ public class Main : MonoBehaviour
     // Game status boolean variables
     private Boolean fallingObjectPowerupActive;
     private Boolean arrowsPowerupActive;
+    private Boolean handPowerupActive;
 
     // Game credits (called rufianes)
     private float rufianes;
 
-    // Private (non assignable variables)
     private ArrayList enemies;
     private Tower tower;
     private GameObject marker;
+    private GameObject hand;
     private const int enemyCount = 200;
 
     // Start is called before the first frame update
@@ -125,7 +127,6 @@ public class Main : MonoBehaviour
                 Vector3 point = hit.point;
                 point.y += 2.0f;
                 marker.transform.position = point;
-                
             }
 
             // Detect mouse press event
@@ -134,6 +135,31 @@ public class Main : MonoBehaviour
                 this.CustomOnMouseDown();
             }
 
+        } else if (handPowerupActive)
+        {
+            Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            var collider = tower.GetComponent<Collider>();
+
+            if (collider.Raycast(ray, out hit, 100000f))
+            {
+                Vector3 point = hit.point;
+
+                Vector3 cameraPos = targetCamera.transform.position;
+
+                // Get vector to camera pos
+                Vector3 toCamera = new Vector3(
+                    cameraPos.x - point.x,
+                    cameraPos.y - point.y,
+                    cameraPos.z - point.z
+                );
+
+                toCamera.Normalize();
+
+                hand.transform.position = point + toCamera * 10;
+                print(hand.transform.position);
+            }
         } else
         {
             marker.SetActive(false);
@@ -164,6 +190,14 @@ public class Main : MonoBehaviour
         );
     }
 
+    void ResetHand()
+    {
+        if( hand)
+        {
+            GameObject.Destroy(hand);
+            hand = null;
+        }
+    }
     public void CustomOnMouseDown()
     {
         Vector3 markerPosition = marker.transform.position;
@@ -179,7 +213,10 @@ public class Main : MonoBehaviour
                 100,
                 markerPosition.z
             );
-        } else if (arrowsPowerupActive)
+            return;
+        }
+        
+        if (arrowsPowerupActive)
         {
             for(int i = 0; i < arrowsCountPerBatch; i++)
             {
@@ -207,6 +244,8 @@ public class Main : MonoBehaviour
 
                 arrow.transform.TransformDirection(velocity);
             }
+
+            return;
         }
     }
 
@@ -246,23 +285,40 @@ public class Main : MonoBehaviour
         ball.transform.position = new Vector3(x,y,z);
     }
 
-    public void StartFallingObjectPowerup()
+    public void SwitchFallingObjectPowerup()
     {
-        this.fallingObjectPowerupActive = true;
-    }
+        this.fallingObjectPowerupActive = ! this.fallingObjectPowerupActive;
 
-    public void StopFallingObjectPowerup()
-    {
-        this.fallingObjectPowerupActive = false;
-    }
-
-    public void StartArrowsPowerup()
-    {
-        this.arrowsPowerupActive = true;
-    }
-
-    public void StopArrowsPowerup()
-    {
+        // Disable any of other powerups
         this.arrowsPowerupActive = false;
+        this.handPowerupActive = false;
+
+        this.ResetHand();
+    }
+
+    public void SwitchArrowsPowerup()
+    {
+        this.arrowsPowerupActive = !this.arrowsPowerupActive;
+
+        // Disable any of other powerups
+        this.fallingObjectPowerupActive = false;
+        this.handPowerupActive = false;
+
+        this.ResetHand();
+    }
+
+    public void SwitchHandPowerup()
+    {
+        this.handPowerupActive = !this.handPowerupActive;
+
+        // Disable any of other powerups
+        this.fallingObjectPowerupActive = false;
+        this.arrowsPowerupActive = false;
+
+        // Instantiate hand object
+        if (this.handPowerupActive)
+            hand = Instantiate(handPattern) as GameObject;
+        else
+            this.ResetHand();
     }
 }
