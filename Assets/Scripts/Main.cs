@@ -22,6 +22,7 @@ public class Main : MonoBehaviour
     public GameObject markerPattern;
     public GameObject arrowPattern;
     public GameObject handPattern;
+    public AudioClip backgroundMusic;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -48,6 +49,13 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Start playing our music
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.clip = backgroundMusic;
+        audioSource.loop = true;
+        audioSource.volume = 0.5f;
+        audioSource.Play();
+
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
         tower.transform.position = new Vector3(0,0,0);
