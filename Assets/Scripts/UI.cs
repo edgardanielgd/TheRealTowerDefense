@@ -13,16 +13,16 @@ public class UI : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
-        var creditsPanel = transform.Find("CreditsPanel").gameObject;
-        rufianeesTextObject = creditsPanel.transform.Find("RufianesTitle").gameObject;
+        //var creditsPanel = transform.Find("CreditsPanel").gameObject;
+        //rufianeesTextObject = creditsPanel.transform.Find("RufianesTitle").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        var text = rufianeesTextObject.GetComponent<TextMeshPro>();
-        text.SetText("Rufianes: " + main.GetRufianes());
-        print(main.GetRufianes());
+        //var text = rufianeesTextObject.GetComponent<TextMeshPro>();
+        //text.SetText("Rufianes: " + main.GetRufianes());
+        //print(main.GetRufianes());
     }
 
     public void OnRock()

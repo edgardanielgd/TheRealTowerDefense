@@ -19,4 +19,19 @@ public class Ball : MonoBehaviour
             0, -10, 0
         ));
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        GameObject target = collision.gameObject;
+
+        if (target != null)
+        {
+            Enemy enemy = target.GetComponent<Enemy>();
+
+            if (enemy != null)
+            {
+                enemy.ApplyBulletHit("Ball");
+            }
+        }
+    }
 }

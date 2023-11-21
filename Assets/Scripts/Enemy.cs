@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
     // it should be enough to calculate this object's
     // position
     public float angle = 0;
+    public float maxLife = DEFAULT_FULL_LIFE;
+
     private float angularSpeed;
     private float life;
 
@@ -25,7 +27,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         angularSpeed = DEFAULT_ANGULAR_SPEED;
-        life = DEFAULT_FULL_LIFE;
+        life = maxLife;
     }
 
     // Update is called once per frame
@@ -35,14 +37,13 @@ public class Enemy : MonoBehaviour
         float pathWidth = parent.getPathWidth();
         float towerHeight = parent.getHeight();
         float angleOffset = parent.getAngleOffset();
-        float towerHeightOffset = parent.getHeightOffset();
+
         Vector3 towerPos = parent.getPosition();
 
         // Apply transformation to next position
         float radius = (float)(
             radiusOffset - pathWidth / 2 - pathWidth * angle / (2 * Mathf.PI ) 
         );
-        float elevation_factor = towerHeight / (float)(parent.getLaps() * 2 * Math.PI);
 
         float x = (float)(
             towerPos.x + radius * Math.Cos( angle + angleOffset )
@@ -69,13 +70,23 @@ public class Enemy : MonoBehaviour
             transform.position = point;
         }
 
+        // Intercept mouse with object
+
+
+        Vector3 parentPosition = parent.transform.position;
+        Vector3 selfPosition = transform.position;
+
         // Face always the movement vector
-        Vector3 newRotation = new Vector3(
-           transform.rotation.x,
-           transform.rotation.y,
-           transform.rotation.z  
-        );
-        // transform.rotation.SetEulerRotation(newRotation);
+        Vector3 toCenter = parentPosition - selfPosition;
+        toCenter.y = 0;
+        toCenter.Normalize();
+
+        var centerAngle = Mathf.Acos(toCenter.x) - Mathf.PI / 2;
+        toCenter.x = Mathf.Cos(centerAngle);
+        toCenter.z = Mathf.Sin(centerAngle);
+
+        Quaternion rotation = Quaternion.LookRotation(toCenter, Vector3.up);
+        transform.rotation = rotation;
 
         // Update angle position
         float delta = Time.deltaTime;
@@ -85,17 +96,31 @@ public class Enemy : MonoBehaviour
     // Getters and setters for this object
     public void setParentTower( Tower tower ) { 
         this.parent = tower;
-
-        
     }
     public void setAngle(  float angle ) { this.angle = angle; }
 
-    void OnCollisionEnter(Collision collision)
+    public void ApplyBulletHit( String bulletType )
     {
-        foreach (ContactPoint contact in collision.contacts)
+        switch(bulletType)
         {
-            print("Ola");
-            Debug.DrawRay(contact.point, contact.normal, Color.white);
+            case "Ball":
+                life -= 50;
+                break;
+
+            case "Arrow":
+                life -= 10;
+                break;
+
+            case "Hand":
+                life -= 80;
+                break;
+        }
+
+        if (life <= 0)
+        {
+            ParticleSystem exp = GetComponent<ParticleSystem>();
+            exp.Play();
+            Destroy(gameObject, exp.main.duration);
         }
     }
 }

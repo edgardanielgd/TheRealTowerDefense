@@ -293,6 +293,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1513654723272908481, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.29000854
+      objectReference: {fileID: 0}
+    - target: {fileID: 3235659725714803534, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.9370117
+      objectReference: {fileID: 0}
     - target: {fileID: 3366782765803422675, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_Camera
       value: 
@@ -300,6 +308,10 @@ PrefabInstance:
     - target: {fileID: 3366782765803422675, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3676435587199186662, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.5287018
       objectReference: {fileID: 0}
     - target: {fileID: 4363235300625546938, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: main
@@ -323,11 +335,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6994939276965097155, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000076293945
+      value: -0.000091552734
       objectReference: {fileID: 0}
     - target: {fileID: 6994939276965097155, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00001335144
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7453010418279727751, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_Pivot.x
@@ -1978,10 +1990,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy1Pattern: {fileID: 1008699222450657900, guid: e1f4cc8c39e3a9940b805b4db96d339f, type: 3}
   towerPattern: {fileID: 3881705358140557646, guid: e9418b12b152bc8409a4240d5fef6d60, type: 3}
-  ballPattern: {fileID: 388098791581990735, guid: 16929501d39617246846e59624f82350, type: 3}
+  ballPattern: {fileID: 6452096292072886553, guid: 16929501d39617246846e59624f82350, type: 3}
   markerPattern: {fileID: 933433957520847596, guid: 1143b8540df988d4ea983fcb821f9c6b, type: 3}
-  arrowPattern: {fileID: 7475043664807916551, guid: 5b7c414b4ef32a549bae67af47fdfbe0, type: 3}
-  handPattern: {fileID: 4192673885453770028, guid: 0d8499fcc33d42d42bb0dae3d3455cba, type: 3}
+  arrowPattern: {fileID: 2649461567675216141, guid: 5b7c414b4ef32a549bae67af47fdfbe0, type: 3}
+  handPattern: {fileID: 9030921667791313572, guid: 0d8499fcc33d42d42bb0dae3d3455cba, type: 3}
   backgroundMusic: {fileID: 8300000, guid: 06e90cc079c64bc41a66d573ba7b2677, type: 3}
   targetCamera: {fileID: 2073018726}
 --- !u!82 &2049855608

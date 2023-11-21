@@ -18,10 +18,10 @@ public class Main : MonoBehaviour
     // are initiallizable (must be public in order to be assignable)
     public Enemy enemy1Pattern;
     public Tower towerPattern;
-    public GameObject ballPattern;
+    public Ball ballPattern;
     public GameObject markerPattern;
-    public GameObject arrowPattern;
-    public GameObject handPattern;
+    public Arrow arrowPattern;
+    public Hand handPattern;
     public AudioClip backgroundMusic;
 
     // Target camera that rotates surrounding the target tower
@@ -43,8 +43,8 @@ public class Main : MonoBehaviour
     private ArrayList enemies;
     private Tower tower;
     private GameObject marker;
-    private GameObject hand;
-    private const int enemyCount = 200;
+    private Hand hand;
+    private const int enemyCount = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -120,59 +120,35 @@ public class Main : MonoBehaviour
 
         SetCameraPosition();
 
+
         // CUSTOM EVENTS
-        if (fallingObjectPowerupActive || arrowsPowerupActive) {
-
-            marker.SetActive(true);
-            
-            Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            var collider = tower.GetComponent<Collider>();
-
-            if (collider.Raycast(ray, out hit, 100000f))
-            {
-                Vector3 point = hit.point;
-                point.y += 2.0f;
-                marker.transform.position = point;
-            }
-
-            // Detect mouse press event
-            if( Input.GetMouseButtonDown(0) )
-            {
-                this.CustomOnMouseDown();
-            }
-
-        } else if (handPowerupActive)
+        if (fallingObjectPowerupActive || arrowsPowerupActive || handPowerupActive)
         {
             Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             var collider = tower.GetComponent<Collider>();
+            var collision = collider.Raycast(ray, out hit, 100000f);
 
-            if (collider.Raycast(ray, out hit, 100000f))
+            if (collision)
             {
                 Vector3 point = hit.point;
+                if (fallingObjectPowerupActive || arrowsPowerupActive)
+                {   
+                    point.y += 2.0f;
+                    marker.transform.position = point;
+                } else if (handPowerupActive)
+                {
+                    hand.Posisionate(targetCamera.transform.position, point);
+                }
 
-                Vector3 cameraPos = targetCamera.transform.position;
-
-                // Get vector to camera pos
-                Vector3 toCamera = new Vector3(
-                    cameraPos.x - point.x,
-                    cameraPos.y - point.y,
-                    cameraPos.z - point.z
-                );
-
-                toCamera.Normalize();
-
-                hand.transform.position = point + toCamera * 10;
-                print(hand.transform.position);
+                // Detect mouse press event
+                if (Input.GetMouseButtonDown(0))
+                {
+                    this.CustomOnMouseDown();
+                }
             }
-        } else
-        {
-            marker.SetActive(false);
         }
-        
     }
 
     void SetCameraPosition()
@@ -202,7 +178,7 @@ public class Main : MonoBehaviour
     {
         if( hand)
         {
-            GameObject.Destroy(hand);
+            Destroy(hand);
             hand = null;
         }
     }
@@ -221,39 +197,13 @@ public class Main : MonoBehaviour
                 100,
                 markerPosition.z
             );
-            return;
-        }
-        
-        if (arrowsPowerupActive)
+        } else if (arrowsPowerupActive)
         {
-            for(int i = 0; i < arrowsCountPerBatch; i++)
+            for (int i = 0; i < arrowsCountPerBatch; i++)
             {
                 var arrow = Instantiate(arrowPattern);
-
-                arrow.transform.position = new Vector3(
-                    cameraPosition.x,
-                    cameraPosition.y,
-                    cameraPosition.z
-                );
-
-                var velocity = new Vector3(
-                    markerPosition.x - arrow.transform.position.x,
-                    markerPosition.y - arrow.transform.position.y,
-                    markerPosition.z - arrow.transform.position.z
-                );
-
-                velocity.Normalize();
-
-                velocity *= 50f;
-
-                var arrowBody = arrow.GetComponent<Rigidbody>();
-
-                arrowBody.velocity = velocity;
-
-                arrow.transform.TransformDirection(velocity);
+                arrow.Posisionate( cameraPosition, markerPosition);
             }
-
-            return;
         }
     }
 
@@ -325,7 +275,7 @@ public class Main : MonoBehaviour
 
         // Instantiate hand object
         if (this.handPowerupActive)
-            hand = Instantiate(handPattern) as GameObject;
+            hand = Instantiate(handPattern);
         else
             this.ResetHand();
     }
