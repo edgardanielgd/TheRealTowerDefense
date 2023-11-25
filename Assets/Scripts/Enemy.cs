@@ -99,8 +99,13 @@ public class Enemy : MonoBehaviour
     }
     public void setAngle(  float angle ) { this.angle = angle; }
 
+    public void OnCollisionEnter(Collision collision)
+    {
+        print("Collides");
+    }
     public void ApplyBulletHit( String bulletType )
     {
+        
         switch(bulletType)
         {
             case "Ball":
@@ -118,9 +123,7 @@ public class Enemy : MonoBehaviour
 
         if (life <= 0)
         {
-            ParticleSystem exp = GetComponent<ParticleSystem>();
-            exp.Play();
-            Destroy(gameObject, exp.main.duration);
+            Destroy(gameObject);
         }
     }
 }
