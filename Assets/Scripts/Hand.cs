@@ -33,4 +33,22 @@ public class Hand : MonoBehaviour
     {
         
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision != null)
+        {
+            GameObject target = collision.gameObject;
+
+            if (target != null)
+            {
+                Enemy enemy = target.GetComponent<Enemy>();
+
+                if (enemy != null)
+                {
+                    enemy.ApplyBulletHit("Hand");
+                }
+            }
+        }
+    }
 }
