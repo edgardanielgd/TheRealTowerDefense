@@ -2144,7 +2144,7 @@ MonoBehaviour:
   maxHealth: 100
   persistentScore: 1
   persistentTimeOffset: 1
-  time2Win: 20
+  time2Win: 120
   targetCamera: {fileID: 2104195698}
 --- !u!82 &2049855608
 AudioSource:
