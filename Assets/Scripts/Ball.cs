@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Ball : Weapon
 {
     // Start is called before the first frame update
+    private float life = 100;
+    private bool isDying = false;
+
     void Start()
     {
        
@@ -33,6 +36,22 @@ public class Ball : MonoBehaviour
             {
                 enemy.ApplyBulletHit("Ball");
             }
+        }
+
+        if (!isDying)
+        {
+            InvokeRepeating("ReduceLife", 0f, 1.0f);
+            isDying = true;
+        }
+    }
+
+    void ReduceLife()
+    {
+        life -= 10;
+
+        if (life <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

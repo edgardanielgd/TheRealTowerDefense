@@ -5,24 +5,34 @@ using UnityEngine;
 using UnityEngine.Timeline;
 
 public class Main : MonoBehaviour
-{ 
+{
     /* Vector represents the movement factors for camera:
      * x: Factor for radius changes
      * y: Factor for angle changes
      * z: Factor for elevation changes
      * */
-    static Vector3 cameraSpeed = new Vector3(0.5f, 0.01f, 0.5f);
-    static int arrowsCountPerBatch = 1;
+    static Vector3 CAMERA_SPEED = new Vector3(0.5f, 0.03f, 1f);
+    static int ARROWS_PER_BATCH = 1;
+    static float DEFAULT_INITIAl_HEALTH = 100f;
+    static float DEFAULT_PERSISTENT_SCORE = 1f;
+    static float DEFAULT_PERSISTENT_TIME_OFFSET = 1f;
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
-    public Enemy enemy1Pattern;
+
+    // Enemies prefabs
+    public Enemy[] enemiesPatterns;
+
     public Tower towerPattern;
     public Ball ballPattern;
     public GameObject markerPattern;
     public Arrow arrowPattern;
     public Hand handPattern;
-    public AudioClip backgroundMusic;
+
+    public float minSpawnOffset = 1f;
+    public float maxHealth = DEFAULT_INITIAl_HEALTH;
+    public float persistentScore = DEFAULT_PERSISTENT_SCORE;
+    public float persistentTimeOffset = DEFAULT_PERSISTENT_TIME_OFFSET;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -40,40 +50,47 @@ public class Main : MonoBehaviour
     // Game credits (called rufianes)
     private float rufianes;
 
-    private ArrayList enemies;
+    // Player's life
+    private float health;
+
     private Tower tower;
     private GameObject marker;
     private Hand hand;
-    private const int enemyCount = 2;
+
+    private bool OnEnemyJourney(float damage)
+    {
+        health -= damage;
+
+        if (damage <= 0 )
+        {
+            // Game over man
+        }
+
+        return true;
+    }
+
+    private bool OnEnemyDeath(float income)
+    {
+        rufianes += income;
+        return true;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         // Start playing our music
         var audioSource = GetComponent<AudioSource>();
-        audioSource.clip = backgroundMusic;
         audioSource.loop = true;
         audioSource.volume = 1f;
         audioSource.Play();
 
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
-        tower.transform.position = new Vector3(0,0,0);
+        tower.transform.position = new Vector3(0, 0, 0);
         tower.CalculateDims();
 
         // Create marker
         marker = Instantiate(markerPattern) as GameObject;
-
-        // Create base enemies
-        enemies = new ArrayList();
-        for (int i = 0; i < enemyCount; i++)
-        {
-            Enemy enemy = Instantiate(enemy1Pattern) as Enemy;
-            enemy.setParentTower(tower);
-            enemy.setAngle(i * Mathf.PI / 16);
-
-            enemies.Add(enemy);
-        }
 
         // Set initial camera coords based on tower position
         cameraRadius = tower.getLaps() * tower.getPathWidth() + 100;
@@ -87,6 +104,16 @@ public class Main : MonoBehaviour
         fallingObjectPowerupActive = false;
         arrowsPowerupActive = false;
         rufianes = 100;
+
+        health = maxHealth;
+
+        // Start enemies spawn
+        for(int i = 0; i < enemiesPatterns.Length; i ++)
+        {
+            StartCoroutine(SpawnEnemy(enemiesPatterns[i]));
+        }
+
+        StartCoroutine(GivePersistentScore());
     }
 
     // Update is called once per frame
@@ -95,23 +122,23 @@ public class Main : MonoBehaviour
         // CAMERA 
 
         // Update camera position
-        if (Input.GetKey(KeyCode.W)) { cameraRadius -= cameraSpeed.x; }
-        if (Input.GetKey(KeyCode.S)) { cameraRadius += cameraSpeed.x; }
-        if (Input.GetKey(KeyCode.D)) { cameraAngle += cameraSpeed.y; }
-        if (Input.GetKey(KeyCode.A)) { cameraAngle -= cameraSpeed.y; }
-        if (Input.GetKey(KeyCode.E)) { cameraElevation += cameraSpeed.z; }
-        if (Input.GetKey(KeyCode.Q)) { cameraElevation -= cameraSpeed.z; }
+        if (Input.GetKey(KeyCode.W)) { cameraRadius -= CAMERA_SPEED.x; }
+        if (Input.GetKey(KeyCode.S)) { cameraRadius += CAMERA_SPEED.x; }
+        if (Input.GetKey(KeyCode.D)) { cameraAngle += CAMERA_SPEED.y; }
+        if (Input.GetKey(KeyCode.A)) { cameraAngle -= CAMERA_SPEED.y; }
+        if (Input.GetKey(KeyCode.E)) { cameraElevation += CAMERA_SPEED.z; }
+        if (Input.GetKey(KeyCode.Q)) { cameraElevation -= CAMERA_SPEED.z; }
 
         // Fix position based on constraints
         float totalRadius = (tower.getLaps() + 1) * tower.getPathWidth();
         if (cameraRadius < totalRadius) { cameraRadius = totalRadius; }
-        else if( cameraRadius > totalRadius + 100  ) { cameraRadius = totalRadius + 100; }
+        else if (cameraRadius > totalRadius + 100) { cameraRadius = totalRadius + 100; }
 
         if (cameraAngle < 0) { cameraAngle = 2 * Mathf.PI; }
-        else if (cameraAngle > 2 * Mathf.PI ) { cameraAngle = 0; }
+        else if (cameraAngle > 2 * Mathf.PI) { cameraAngle = 0; }
 
-        if (cameraElevation < tower.transform.position.z + 10 ) { 
-            cameraElevation = tower.transform.position.z + 10; 
+        if (cameraElevation < tower.transform.position.z + 10) {
+            cameraElevation = tower.transform.position.z + 10;
         }
         else if (cameraElevation > tower.transform.position.z + tower.getHeight() * 2.0)
         {
@@ -134,7 +161,7 @@ public class Main : MonoBehaviour
             {
                 Vector3 point = hit.point;
                 if (fallingObjectPowerupActive || arrowsPowerupActive)
-                {   
+                {
                     point.y += 2.0f;
                     marker.transform.position = point;
                 } else if (handPowerupActive)
@@ -149,6 +176,32 @@ public class Main : MonoBehaviour
                 }
             }
         }
+    }
+
+    IEnumerator SpawnEnemy(Enemy enemyPattern)
+    {
+        while(true)
+        {
+            // Simulatee a random type of Enemy
+            Enemy enemy = Instantiate(enemyPattern) as Enemy;
+            enemy.setParentTower(tower);
+            enemy.setAngle(Mathf.PI / 16);
+            enemy.setDelegates(OnEnemyJourney, OnEnemyDeath);
+
+            // Schedule next event
+            var time = -Mathf.Log(UnityEngine.Random.value) * enemyPattern.spawnTime;
+            yield return new WaitForSeconds(minSpawnOffset + time);
+        }
+    }
+
+    IEnumerator GivePersistentScore()
+    {
+        while(true)
+        {
+            rufianes += persistentScore;
+            yield return new WaitForSeconds(persistentTimeOffset);
+        }
+        
     }
 
     void SetCameraPosition()
@@ -174,14 +227,20 @@ public class Main : MonoBehaviour
         );
     }
 
+    bool OnHandDelete()
+    {
+        SwitchHandPowerup();
+        return true;
+    }
     void ResetHand()
     {
-        if( hand)
+        if( hand )
         {
-            Destroy(hand);
+            hand.DestroyHand();
             hand = null;
         }
     }
+    
     public void CustomOnMouseDown()
     {
         Vector3 markerPosition = marker.transform.position;
@@ -189,6 +248,15 @@ public class Main : MonoBehaviour
 
         if (fallingObjectPowerupActive)
         {
+            if (this.rufianes < ballPattern.weaponCost)
+            {
+                return;
+            }
+            else
+            {
+                this.rufianes -= ballPattern.weaponCost;
+            }
+
             // Throw a rock at marker's position in XZ, high in Y
             var ball = Instantiate(ballPattern);
 
@@ -199,7 +267,16 @@ public class Main : MonoBehaviour
             );
         } else if (arrowsPowerupActive)
         {
-            for (int i = 0; i < arrowsCountPerBatch; i++)
+            if (this.rufianes < arrowPattern.weaponCost)
+            {
+                return;
+            }
+            else
+            {
+                this.rufianes -= arrowPattern.weaponCost;
+            }
+
+            for (int i = 0; i < ARROWS_PER_BATCH; i++)
             {
                 var arrow = Instantiate(arrowPattern);
                 arrow.Posisionate( cameraPosition, markerPosition);
@@ -210,6 +287,16 @@ public class Main : MonoBehaviour
     public float GetRufianes()
     {
         return this.rufianes;
+    }
+
+    public float GetHealth()
+    {
+        return this.health;
+    }
+
+    public float GetMaxHealth()
+    {
+        return this.maxHealth;
     }
 
     public void SetRufianes(float rufianes )
@@ -275,8 +362,14 @@ public class Main : MonoBehaviour
 
         // Instantiate hand object
         if (this.handPowerupActive)
+        {
+            if(this.rufianes < handPattern.weaponCost) { 
+                return; 
+            } else { this.rufianes -= handPattern.weaponCost; }
+
             hand = Instantiate(handPattern);
-        else
+            hand.setDelegates(OnHandDelete);
+        } else
             this.ResetHand();
     }
 }

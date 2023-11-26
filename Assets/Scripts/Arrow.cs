@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow : Weapon
 {
     // Start is called before the first frame update
     void Start()
@@ -28,7 +28,7 @@ public class Arrow : MonoBehaviour
 
         velocity.Normalize();
 
-        velocity *= 50f;
+        velocity *= 200f;
 
         var arrowBody = GetComponent<Rigidbody>();
 

@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d63843750ab50244ac1e5879f567408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!82 &8551148895196938748
 AudioSource:
   m_ObjectHideFlags: 0
@@ -242,3 +243,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+=======
+  weeaponCost: 30
+>>>>>>> 3cde7da72c512158048413e55e78b06a7acbeab1
