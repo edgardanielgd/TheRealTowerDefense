@@ -7,7 +7,10 @@ public class Arrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.loop = false;
+        audioSource.volume = 1f;
+        audioSource.Play();
     }
     public void Posisionate( Vector3 cameraPosition, Vector3 targetPosition)
     {

@@ -28,6 +28,12 @@ public class Enemy : MonoBehaviour
     {
         angularSpeed = DEFAULT_ANGULAR_SPEED;
         life = maxLife;
+
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.loop = true;
+        audioSource.volume = 0.1f;
+        audioSource.Play();
+        Invoke("Stop loop", 1f);
     }
 
     // Update is called once per frame
