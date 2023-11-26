@@ -98,9 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b97397a54b1f5246a84f48303476db6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponCost: 1
-  damage: 300
-  nukeRange: 100
+  weaponCost: 100
+  damage: 500
+  nukeRange: 200
 --- !u!54 &2445908759593614215
 Rigidbody:
   m_ObjectHideFlags: 0

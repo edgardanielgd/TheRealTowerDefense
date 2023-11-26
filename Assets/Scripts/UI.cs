@@ -49,7 +49,7 @@ public class UI : MonoBehaviour {
         int seconds = main.GetTimeLeft();
         int minutes2show = (int)(seconds / 60);
         int seconds2show = seconds % 60;
-        timeLeftTextObject.SetText("Time Left: " + minutes2show + ":" + seconds2show);
+        timeLeftTextObject.SetText("Time Left " + minutes2show + ":" + seconds2show);
 
         var enemyHealth = main.GetPointedEnemyHealth();
 

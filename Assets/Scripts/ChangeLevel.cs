@@ -7,7 +7,7 @@ public class ChangeLevel : MonoBehaviour
 {
     public void ChangeScene(string name)
     {
-        SceneManager.LoadScene(name);
+        SceneManager.LoadScene(name, LoadSceneMode.Single);
     }
 
     public void Exit()

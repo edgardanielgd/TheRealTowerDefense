@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
+using System.Diagnostics;
 
 public class Main : MonoBehaviour
 {
@@ -59,6 +60,9 @@ public class Main : MonoBehaviour
 
     // Show pointed enemy health
     private float enemyHealth;
+
+    // Measure elapsed time
+    private Stopwatch watch;
 
     private Tower tower;
     private GameObject marker;
@@ -132,6 +136,8 @@ public class Main : MonoBehaviour
         }
 
         StartCoroutine(GivePersistentScore());
+
+        watch = Stopwatch.StartNew();
     }
 
     // Update is called once per frame
@@ -199,9 +205,9 @@ public class Main : MonoBehaviour
                 }
             }
         }
-        
+
         // GAME IS WON WHEN TIME ENDS
-        if (Time.realtimeSinceStartup >= time2Win)
+        if ((int)(watch.ElapsedMilliseconds / 1000) >= time2Win)
         {
             // Game over
             GetComponent<ChangeLevel>().ChangeScene("credits");
@@ -345,9 +351,7 @@ public class Main : MonoBehaviour
     public int GetTimeLeft()
     {
         // Number of seconds for the game to end
-        print("2win" + time2Win);
-        print((int)Time.realtimeSinceStartup);
-        return time2Win - (int)Time.realtimeSinceStartup;
+        return time2Win - (int)(watch.ElapsedMilliseconds / 1000);
 
     }
     public float GetPointedEnemyHealth()
