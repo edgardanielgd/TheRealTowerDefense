@@ -7,11 +7,11 @@ public class ChangeLevel : MonoBehaviour
 {
     public void ChangeScene(string name)
     {
-        Debug.Log("AAA");
         SceneManager.LoadScene(name);
     }
 
-    void Start(){
-        Debug.Log("AAA");
+    public void Exit()
+    {
+        Application.Quit();
     }
 }
