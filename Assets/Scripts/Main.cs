@@ -11,7 +11,7 @@ public class Main : MonoBehaviour
      * y: Factor for angle changes
      * z: Factor for elevation changes
      * */
-    static Vector3 cameraSpeed = new Vector3(0.5f, 0.03f, 0.5f);
+    static Vector3 cameraSpeed = new Vector3(0.5f, 0.03f, 1f);
 
     static int arrowsCountPerBatch = 1;
 
@@ -30,7 +30,7 @@ public class Main : MonoBehaviour
     public float minSpawnOffset = 1f;
 
     // Target camera that rotates surrounding the target tower
-    public GameObject targetCamera;
+    public Camera targetCamera;
 
     // Camera position will be calculated from cylindrical coordinates
     private float cameraRadius;
@@ -121,8 +121,7 @@ public class Main : MonoBehaviour
         // CUSTOM EVENTS
         if (fallingObjectPowerupActive || arrowsPowerupActive || handPowerupActive)
         {
-            var camera = targetCamera.GetComponent<Camera>();
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             var collider = tower.GetComponent<Collider>();

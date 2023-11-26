@@ -77,19 +77,23 @@ public class Enemy : MonoBehaviour
 
         // Face always the movement vector
         Vector3 toCenter = parentPosition - selfPosition;
-        toCenter.y = 0;
         toCenter.Normalize();
 
-        var centerAngle = Mathf.Acos(toCenter.x) - Mathf.PI / 2;
-        toCenter.x = Mathf.Cos(centerAngle);
-        toCenter.z = Mathf.Sin(centerAngle);
-
         Quaternion rotation = Quaternion.LookRotation(toCenter, Vector3.up);
-        transform.rotation = rotation;
+        transform.rotation = rotation * Quaternion.Euler(Vector3.up * 90);
 
-        // Update angle position
-        float delta = Time.deltaTime;
-        angle += angularSpeed * delta;
+        float maxAngle = parent.getLaps() * Mathf.PI * 2;
+        if (angle >= maxAngle)
+        {
+            // Apply damage to player
+
+        } else
+        {
+            // Update angle position
+            float delta = Time.deltaTime;
+            angle += angularSpeed * delta;
+        }
+        
     }
 
     // Getters and setters for this object
@@ -122,6 +126,8 @@ public class Enemy : MonoBehaviour
 
         if (life <= 0)
         {
+            // Give rufianes to player
+
             Destroy(gameObject);
         }
     }
