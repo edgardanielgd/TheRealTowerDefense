@@ -142,27 +142,9 @@ public class Enemy : MonoBehaviour
         OnPointed = onPointed;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public void ApplyBulletHit( float damage )
     {
-        print("Collides");
-    }
-    public void ApplyBulletHit( String bulletType )
-    {
-        
-        switch(bulletType)
-        {
-            case "Ball":
-                life -= 50;
-                break;
-
-            case "Arrow":
-                life -= 10;
-                break;
-
-            case "Hand":
-                life -= 80;
-                break;
-        }
+        life -= damage;
 
         if (life <= 0)
         {

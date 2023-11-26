@@ -28,6 +28,7 @@ public class Main : MonoBehaviour
     public GameObject markerPattern;
     public Arrow arrowPattern;
     public Hand handPattern;
+    public Nuke nukePattern;
 
     public float minSpawnOffset = 1f;
     public float maxHealth = DEFAULT_INITIAl_HEALTH;
@@ -46,6 +47,7 @@ public class Main : MonoBehaviour
     private Boolean fallingObjectPowerupActive;
     private Boolean arrowsPowerupActive;
     private Boolean handPowerupActive;
+    private Boolean nukePowerupActive;
 
     // Game credits (called rufianes)
     private float rufianes;
@@ -113,6 +115,9 @@ public class Main : MonoBehaviour
         // Set initial game status
         fallingObjectPowerupActive = false;
         arrowsPowerupActive = false;
+        nukePowerupActive = false;
+        handPowerupActive = false;
+
         rufianes = 100;
 
         health = maxHealth;
@@ -129,6 +134,11 @@ public class Main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // ENEMY HEALTH
+
+        // Reset enemy health
+        enemyHealth = -1f;
+
         // CAMERA 
 
         // Update camera position
@@ -159,7 +169,7 @@ public class Main : MonoBehaviour
 
 
         // CUSTOM EVENTS
-        if (fallingObjectPowerupActive || arrowsPowerupActive || handPowerupActive)
+        if (fallingObjectPowerupActive || arrowsPowerupActive || handPowerupActive || nukePowerupActive)
         {
             Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -170,7 +180,7 @@ public class Main : MonoBehaviour
             if (collision)
             {
                 Vector3 point = hit.point;
-                if (fallingObjectPowerupActive || arrowsPowerupActive)
+                if (fallingObjectPowerupActive || arrowsPowerupActive || nukePowerupActive)
                 {
                     point.y += 2.0f;
                     marker.transform.position = point;
@@ -271,11 +281,8 @@ public class Main : MonoBehaviour
             // Throw a rock at marker's position in XZ, high in Y
             var ball = Instantiate(ballPattern);
 
-            ball.transform.position = new Vector3(
-                markerPosition.x,
-                100,
-                markerPosition.z
-            );
+            ball.Posisionate(markerPosition);
+
         } else if (arrowsPowerupActive)
         {
             if (this.rufianes < arrowPattern.weaponCost)
@@ -292,6 +299,20 @@ public class Main : MonoBehaviour
                 var arrow = Instantiate(arrowPattern);
                 arrow.Posisionate( cameraPosition, markerPosition);
             }
+        } else if (nukePowerupActive)
+        {
+            if (this.rufianes < nukePattern.weaponCost)
+            {
+                return;
+            }
+            else
+            {
+                this.rufianes -= nukePattern.weaponCost;
+            }
+
+            var nuke = Instantiate(nukePattern);
+
+            nuke.Posisionate(markerPosition);
         }
     }
 
@@ -308,6 +329,11 @@ public class Main : MonoBehaviour
     public float GetMaxHealth()
     {
         return this.maxHealth;
+    }
+
+    public float GetPointedEnemyHealth()
+    {
+        return enemyHealth;
     }
 
     public void SetRufianes(float rufianes )
@@ -350,10 +376,24 @@ public class Main : MonoBehaviour
         // Disable any of other powerups
         this.arrowsPowerupActive = false;
         this.handPowerupActive = false;
+        this.nukePowerupActive = false;
 
         this.ResetHand();
     }
 
+    public void SwitchNukePowerup()
+    {
+        this.nukePowerupActive = !this.nukePowerupActive;
+
+        marker.SetActive(this.nukePowerupActive);
+
+        // Disable any of other powerups
+        this.arrowsPowerupActive = false;
+        this.handPowerupActive = false;
+        this.fallingObjectPowerupActive = false;
+
+        this.ResetHand();
+    }
     public void SwitchArrowsPowerup()
     {
         this.arrowsPowerupActive = !this.arrowsPowerupActive;
@@ -363,6 +403,7 @@ public class Main : MonoBehaviour
         // Disable any of other powerups
         this.fallingObjectPowerupActive = false;
         this.handPowerupActive = false;
+        this.nukePowerupActive = false;
 
         this.ResetHand();
     }
@@ -374,6 +415,7 @@ public class Main : MonoBehaviour
         // Disable any of other powerups
         this.fallingObjectPowerupActive = false;
         this.arrowsPowerupActive = false;
+        this.nukePowerupActive = false;
 
         // Instantiate hand object
         marker.SetActive(false);

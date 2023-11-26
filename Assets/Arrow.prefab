@@ -157,3 +157,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e59212b05f7e2f749bd7af988c79f509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponCost: 10
+  damage: 10

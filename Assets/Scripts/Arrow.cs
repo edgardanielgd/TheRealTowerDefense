@@ -55,7 +55,7 @@ public class Arrow : Weapon
 
             if (enemy != null)
             {
-                enemy.ApplyBulletHit("Arrow");
+                enemy.ApplyBulletHit(damage);
             }
         }
     }

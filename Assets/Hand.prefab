@@ -51,7 +51,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f58f88bf29883e4384d0adda74c0a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weeaponCost: 50
+  weaponCost: 10
+  damage: 80
   handLifetime: 5
 --- !u!54 &7776079012885357342
 Rigidbody:

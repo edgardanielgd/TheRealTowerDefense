@@ -76,7 +76,7 @@ public class Hand : Weapon
 
                 if (enemy != null)
                 {
-                    enemy.ApplyBulletHit("Hand");
+                    enemy.ApplyBulletHit(damage);
                 }
             }
         }

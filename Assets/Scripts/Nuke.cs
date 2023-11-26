@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : Weapon
+public class Nuke : Weapon
 {
     // Start is called before the first frame update
-    private float life = 100;
-    private bool isDying = false;
+    private static float DEFAULT_NUKE_RANGE = 10f;
+    public float nukeRange = DEFAULT_NUKE_RANGE;
 
     void Start()
     {
@@ -17,7 +17,7 @@ public class Ball : Weapon
     {
         transform.position = new Vector3(
             referencePosition.x,
-            referencePosition.y + 100,
+            referencePosition.y + 500,
             referencePosition.z
         );
     }
@@ -28,38 +28,28 @@ public class Ball : Weapon
         var rigidBody = GetComponent<Rigidbody>();
 
         rigidBody.AddForce(new Vector3(
-            0, -10, 0
+            0, -15, 0
         ));
+    }
+
+    void DestroyMe()
+    {
+        Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        GameObject target = collision.gameObject;
+        // Make damage
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, nukeRange);
 
-        if (target != null)
+        foreach (Collider col in hitColliders)
         {
-            Enemy enemy = target.GetComponent<Enemy>();
-
-            if (enemy != null)
+            if (col.TryGetComponent(out Enemy enemy))
             {
                 enemy.ApplyBulletHit(damage);
             }
         }
 
-        if (!isDying)
-        {
-            InvokeRepeating("ReduceLife", 0f, 1.0f);
-            isDying = true;
-        }
-    }
-
-    void ReduceLife()
-    {
-        life -= 10;
-
-        if (life <= 0)
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }
