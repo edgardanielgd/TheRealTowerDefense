@@ -11,6 +11,7 @@ public class UI : MonoBehaviour {
     public Main main;
 
     private TextMeshProUGUI rufianesTextObject = null;
+    private TextMeshProUGUI timeLeftTextObject = null;
     private Slider healthSliderObject = null;
     private GameObject enemyHealthPanelObject = null;
     private TextMeshProUGUI enemyHealthTextObject = null;
@@ -32,6 +33,10 @@ public class UI : MonoBehaviour {
         var enemyHealthObject = enemyHealthPanelObject.transform.Find("EnemyHealthValue").gameObject;
         enemyHealthTextObject = enemyHealthObject.GetComponent<TextMeshProUGUI>();
 
+        var timeLeftPanel = panel.transform.Find("TimeLeftPanel").gameObject;
+        var timeLeftObject = timeLeftPanel.transform.Find("TimeLeftText").gameObject;
+        timeLeftTextObject = timeLeftObject.GetComponent<TextMeshProUGUI>();
+
         healthSliderObject.maxValue = main.GetMaxHealth();
     }
 
@@ -40,6 +45,11 @@ public class UI : MonoBehaviour {
     {
         rufianesTextObject.SetText("Rufianes: " + main.GetRufianes());
         healthSliderObject.value = main.GetHealth();
+
+        int seconds = main.GetTimeLeft();
+        int minutes2show = (int)(seconds / 60);
+        int seconds2show = seconds % 60;
+        timeLeftTextObject.SetText("Time Left: " + minutes2show + ":" + seconds2show);
 
         var enemyHealth = main.GetPointedEnemyHealth();
 

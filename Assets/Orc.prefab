@@ -98,9 +98,9 @@ MonoBehaviour:
   angle: 0
   maxLife: 400
   spawnTime: 3
-  attackDamage: 1
+  attackDamage: 10
   income: 100
-  angularSpeed: 0.1
+  angularSpeed: 10
 --- !u!65 &6175220458054966194
 BoxCollider:
   m_ObjectHideFlags: 0

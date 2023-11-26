@@ -16,6 +16,7 @@ public class Main : MonoBehaviour
     static float DEFAULT_INITIAl_HEALTH = 100f;
     static float DEFAULT_PERSISTENT_SCORE = 1f;
     static float DEFAULT_PERSISTENT_TIME_OFFSET = 1f;
+    static int DEFAULT_TIME_TO_WIN = 120;
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
@@ -34,6 +35,7 @@ public class Main : MonoBehaviour
     public float maxHealth = DEFAULT_INITIAl_HEALTH;
     public float persistentScore = DEFAULT_PERSISTENT_SCORE;
     public float persistentTimeOffset = DEFAULT_PERSISTENT_TIME_OFFSET;
+    public int time2Win = DEFAULT_TIME_TO_WIN;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -67,9 +69,10 @@ public class Main : MonoBehaviour
     {
         health -= damage;
 
-        if (damage <= 0 )
+        if (health <= 0 )
         {
-            // Game over man
+            // Game over
+            GetComponent<ChangeLevel>().ChangeScene("credits");
         }
 
         return true;
@@ -196,6 +199,14 @@ public class Main : MonoBehaviour
                 }
             }
         }
+        
+        // GAME IS WON WHEN TIME ENDS
+        if (Time.realtimeSinceStartup >= time2Win)
+        {
+            // Game over
+            GetComponent<ChangeLevel>().ChangeScene("credits");
+        }
+    
     }
 
     IEnumerator SpawnEnemy(Enemy enemyPattern)
@@ -331,6 +342,14 @@ public class Main : MonoBehaviour
         return this.maxHealth;
     }
 
+    public int GetTimeLeft()
+    {
+        // Number of seconds for the game to end
+        print("2win" + time2Win);
+        print((int)Time.realtimeSinceStartup);
+        return time2Win - (int)Time.realtimeSinceStartup;
+
+    }
     public float GetPointedEnemyHealth()
     {
         return enemyHealth;
