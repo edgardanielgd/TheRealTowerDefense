@@ -2119,6 +2119,7 @@ MonoBehaviour:
   arrowPattern: {fileID: 2649461567675216141, guid: 5b7c414b4ef32a549bae67af47fdfbe0, type: 3}
   handPattern: {fileID: 9030921667791313572, guid: 0d8499fcc33d42d42bb0dae3d3455cba, type: 3}
   minSpawnOffset: 1
+  maxHealth: 100
   targetCamera: {fileID: 2104195698}
 --- !u!82 &2049855608
 AudioSource:

@@ -11,9 +11,9 @@ public class Main : MonoBehaviour
      * y: Factor for angle changes
      * z: Factor for elevation changes
      * */
-    static Vector3 cameraSpeed = new Vector3(0.5f, 0.03f, 1f);
-
-    static int arrowsCountPerBatch = 1;
+    static Vector3 CAMERA_SPEED = new Vector3(0.5f, 0.03f, 1f);
+    static int ARROWS_PER_BATCH = 1;
+    static float DEFAULT_INITIAl_HEALTH = 100;
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
@@ -28,6 +28,7 @@ public class Main : MonoBehaviour
     public Hand handPattern;
 
     public float minSpawnOffset = 1f;
+    public float maxHealth = DEFAULT_INITIAl_HEALTH;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -45,9 +46,30 @@ public class Main : MonoBehaviour
     // Game credits (called rufianes)
     private float rufianes;
 
+    // Player's life
+    private float health;
+
     private Tower tower;
     private GameObject marker;
     private Hand hand;
+
+    private bool OnEnemyJourney(float damage)
+    {
+        health -= damage;
+
+        if (damage <= 0 )
+        {
+            // Game over man
+        }
+
+        return true;
+    }
+
+    private bool OnEnemyDeath(float income)
+    {
+        rufianes += income;
+        return true;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -79,6 +101,8 @@ public class Main : MonoBehaviour
         arrowsPowerupActive = false;
         rufianes = 100;
 
+        health = maxHealth;
+
         // Start enemies spawn
         for(int i = 0; i < enemiesPatterns.Length; i ++)
         {
@@ -92,12 +116,12 @@ public class Main : MonoBehaviour
         // CAMERA 
 
         // Update camera position
-        if (Input.GetKey(KeyCode.W)) { cameraRadius -= cameraSpeed.x; }
-        if (Input.GetKey(KeyCode.S)) { cameraRadius += cameraSpeed.x; }
-        if (Input.GetKey(KeyCode.D)) { cameraAngle += cameraSpeed.y; }
-        if (Input.GetKey(KeyCode.A)) { cameraAngle -= cameraSpeed.y; }
-        if (Input.GetKey(KeyCode.E)) { cameraElevation += cameraSpeed.z; }
-        if (Input.GetKey(KeyCode.Q)) { cameraElevation -= cameraSpeed.z; }
+        if (Input.GetKey(KeyCode.W)) { cameraRadius -= CAMERA_SPEED.x; }
+        if (Input.GetKey(KeyCode.S)) { cameraRadius += CAMERA_SPEED.x; }
+        if (Input.GetKey(KeyCode.D)) { cameraAngle += CAMERA_SPEED.y; }
+        if (Input.GetKey(KeyCode.A)) { cameraAngle -= CAMERA_SPEED.y; }
+        if (Input.GetKey(KeyCode.E)) { cameraElevation += CAMERA_SPEED.z; }
+        if (Input.GetKey(KeyCode.Q)) { cameraElevation -= CAMERA_SPEED.z; }
 
         // Fix position based on constraints
         float totalRadius = (tower.getLaps() + 1) * tower.getPathWidth();
@@ -156,6 +180,7 @@ public class Main : MonoBehaviour
             Enemy enemy = Instantiate(enemyPattern) as Enemy;
             enemy.setParentTower(tower);
             enemy.setAngle(Mathf.PI / 16);
+            enemy.setDelegates(OnEnemyJourney, OnEnemyDeath);
 
             // Schedule next event
             var time = -Mathf.Log(UnityEngine.Random.value) * enemyPattern.spawnTime;
@@ -212,7 +237,7 @@ public class Main : MonoBehaviour
             );
         } else if (arrowsPowerupActive)
         {
-            for (int i = 0; i < arrowsCountPerBatch; i++)
+            for (int i = 0; i < ARROWS_PER_BATCH; i++)
             {
                 var arrow = Instantiate(arrowPattern);
                 arrow.Posisionate( cameraPosition, markerPosition);
@@ -223,6 +248,16 @@ public class Main : MonoBehaviour
     public float GetRufianes()
     {
         return this.rufianes;
+    }
+
+    public float GetHealth()
+    {
+        return this.health;
+    }
+
+    public float GetMaxHealth()
+    {
+        return this.maxHealth;
     }
 
     public void SetRufianes(float rufianes )

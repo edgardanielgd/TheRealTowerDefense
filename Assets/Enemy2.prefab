@@ -112,6 +112,9 @@ MonoBehaviour:
   angle: 0
   maxLife: 100
   spawnTime: 5
+  attackDamage: 1
+  income: 100
+  angularSpeed: 5
 --- !u!54 &1950689758601288210
 Rigidbody:
   m_ObjectHideFlags: 0
