@@ -93,7 +93,7 @@ public class Main : MonoBehaviour
         // Start playing our music
         var audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
-        audioSource.volume = 0.5f;
+        audioSource.volume = 1f;
         audioSource.Play();
 
         // Create base tower

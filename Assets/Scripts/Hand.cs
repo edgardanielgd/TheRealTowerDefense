@@ -65,7 +65,6 @@ public class Hand : Weapon
 
     void OnCollisionEnter(Collision collision)
     {
-        print("Hand Collision");
         if (collision != null)
         {
             GameObject target = collision.gameObject;
@@ -80,5 +79,11 @@ public class Hand : Weapon
                 }
             }
         }
+
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.Stop();
+        audioSource.loop = false;
+        audioSource.volume = 1f;
+        audioSource.Play();
     }
 }

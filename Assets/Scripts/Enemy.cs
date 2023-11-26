@@ -43,6 +43,12 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         life = maxLife;
+
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.loop = false;
+        audioSource.volume = 0.1f;
+        audioSource.Play();
+        //Invoke("StopLoop", 1f);
     }
 
     // Update is called once per frame
@@ -120,6 +126,12 @@ public class Enemy : MonoBehaviour
         {
             OnPointed(life);
         }
+    }
+
+    private void StopLoop()
+    {
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.loop = false;
     }
 
     // Getters and setters for this object

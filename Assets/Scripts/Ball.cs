@@ -10,7 +10,6 @@ public class Ball : Weapon
 
     void Start()
     {
-        
     }
 
     public void Posisionate(Vector3 referencePosition)

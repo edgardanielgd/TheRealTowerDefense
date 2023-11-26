@@ -342,6 +342,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2049855607}
     - target: {fileID: 4368218968050033740, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 2.825325
+      objectReference: {fileID: 0}
+    - target: {fileID: 4368218968050033740, guid: cebf4e498c9d30e438f5ebae6d22dd85, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 1.9124146
       objectReference: {fileID: 0}
@@ -2122,7 +2126,7 @@ MonoBehaviour:
   - {fileID: 1008699222450657900, guid: e1f4cc8c39e3a9940b805b4db96d339f, type: 3}
   - {fileID: 1296289343695426042, guid: 127a34f86d0ca7b41a5684dbe5b3ff0e, type: 3}
   towerPattern: {fileID: 3881705358140557646, guid: e9418b12b152bc8409a4240d5fef6d60, type: 3}
-  ballPattern: {fileID: 6452096292072886553, guid: 16929501d39617246846e59624f82350, type: 3}
+  ballPattern: {fileID: 3027806539251124641, guid: 74885fdd074705543a64a532d5b14dc8, type: 3}
   markerPattern: {fileID: 933433957520847596, guid: 1143b8540df988d4ea983fcb821f9c6b, type: 3}
   arrowPattern: {fileID: 2649461567675216141, guid: 5b7c414b4ef32a549bae67af47fdfbe0, type: 3}
   handPattern: {fileID: 9030921667791313572, guid: 0d8499fcc33d42d42bb0dae3d3455cba, type: 3}

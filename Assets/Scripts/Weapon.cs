@@ -14,7 +14,11 @@ public class Weapon : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (TryGetComponent(out AudioSource audioSource)) {
+            audioSource.loop = false;
+            audioSource.volume = 1f;
+            audioSource.Play();
+        }
     }
 
     // Update is called once per frame

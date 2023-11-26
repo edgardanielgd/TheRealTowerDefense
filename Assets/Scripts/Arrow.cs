@@ -7,7 +7,6 @@ public class Arrow : Weapon
     // Start is called before the first frame update
     void Start()
     {
-        
     }
     public void Posisionate( Vector3 cameraPosition, Vector3 targetPosition)
     {
