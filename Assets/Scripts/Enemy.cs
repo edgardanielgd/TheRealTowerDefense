@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     // Default angular speed for enemies
     private static float DEFAULT_ANGULAR_SPEED = 0.1f;
     private static float DEFAULT_FULL_LIFE = 100f;
+    private static float DEFAULT_SPAWN_TIME = 1f;
     private Tower parent;
 
     // With angle, speed and reference tower dimensions
@@ -19,6 +20,7 @@ public class Enemy : MonoBehaviour
     // position
     public float angle = 0;
     public float maxLife = DEFAULT_FULL_LIFE;
+    public float spawnTime = DEFAULT_SPAWN_TIME;
 
     private float angularSpeed;
     private float life;
@@ -69,9 +71,6 @@ public class Enemy : MonoBehaviour
             // Apply transformation to object
             transform.position = point;
         }
-
-        // Intercept mouse with object
-
 
         Vector3 parentPosition = parent.transform.position;
         Vector3 selfPosition = transform.position;

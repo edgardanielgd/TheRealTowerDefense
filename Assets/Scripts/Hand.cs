@@ -34,8 +34,14 @@ public class Hand : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
+        print("Trigger");
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        print("Hand Collision");
         if (collision != null)
         {
             GameObject target = collision.gameObject;

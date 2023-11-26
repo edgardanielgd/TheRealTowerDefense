@@ -5,27 +5,32 @@ using UnityEngine;
 using UnityEngine.Timeline;
 
 public class Main : MonoBehaviour
-{ 
+{
     /* Vector represents the movement factors for camera:
      * x: Factor for radius changes
      * y: Factor for angle changes
      * z: Factor for elevation changes
      * */
-    static Vector3 cameraSpeed = new Vector3(0.5f, 0.01f, 0.5f);
+    static Vector3 cameraSpeed = new Vector3(0.5f, 0.03f, 0.5f);
+
     static int arrowsCountPerBatch = 1;
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
-    public Enemy enemy1Pattern;
+
+    // Enemies prefabs
+    public Enemy[] enemiesPatterns;
+
     public Tower towerPattern;
     public Ball ballPattern;
     public GameObject markerPattern;
     public Arrow arrowPattern;
     public Hand handPattern;
-    public AudioClip backgroundMusic;
+
+    public float minSpawnOffset = 1f;
 
     // Target camera that rotates surrounding the target tower
-    public Camera targetCamera;
+    public GameObject targetCamera;
 
     // Camera position will be calculated from cylindrical coordinates
     private float cameraRadius;
@@ -40,40 +45,26 @@ public class Main : MonoBehaviour
     // Game credits (called rufianes)
     private float rufianes;
 
-    private ArrayList enemies;
     private Tower tower;
     private GameObject marker;
     private Hand hand;
-    private const int enemyCount = 2;
 
     // Start is called before the first frame update
     void Start()
     {
         // Start playing our music
         var audioSource = GetComponent<AudioSource>();
-        audioSource.clip = backgroundMusic;
         audioSource.loop = true;
         audioSource.volume = 0.5f;
         audioSource.Play();
 
         // Create base tower
         tower = Instantiate(towerPattern) as Tower;
-        tower.transform.position = new Vector3(0,0,0);
+        tower.transform.position = new Vector3(0, 0, 0);
         tower.CalculateDims();
 
         // Create marker
         marker = Instantiate(markerPattern) as GameObject;
-
-        // Create base enemies
-        enemies = new ArrayList();
-        for (int i = 0; i < enemyCount; i++)
-        {
-            Enemy enemy = Instantiate(enemy1Pattern) as Enemy;
-            enemy.setParentTower(tower);
-            enemy.setAngle(i * Mathf.PI / 16);
-
-            enemies.Add(enemy);
-        }
 
         // Set initial camera coords based on tower position
         cameraRadius = tower.getLaps() * tower.getPathWidth() + 100;
@@ -87,6 +78,12 @@ public class Main : MonoBehaviour
         fallingObjectPowerupActive = false;
         arrowsPowerupActive = false;
         rufianes = 100;
+
+        // Start enemies spawn
+        for(int i = 0; i < enemiesPatterns.Length; i ++)
+        {
+            StartCoroutine(SpawnEnemy(enemiesPatterns[i]));
+        }
     }
 
     // Update is called once per frame
@@ -105,13 +102,13 @@ public class Main : MonoBehaviour
         // Fix position based on constraints
         float totalRadius = (tower.getLaps() + 1) * tower.getPathWidth();
         if (cameraRadius < totalRadius) { cameraRadius = totalRadius; }
-        else if( cameraRadius > totalRadius + 100  ) { cameraRadius = totalRadius + 100; }
+        else if (cameraRadius > totalRadius + 100) { cameraRadius = totalRadius + 100; }
 
         if (cameraAngle < 0) { cameraAngle = 2 * Mathf.PI; }
-        else if (cameraAngle > 2 * Mathf.PI ) { cameraAngle = 0; }
+        else if (cameraAngle > 2 * Mathf.PI) { cameraAngle = 0; }
 
-        if (cameraElevation < tower.transform.position.z + 10 ) { 
-            cameraElevation = tower.transform.position.z + 10; 
+        if (cameraElevation < tower.transform.position.z + 10) {
+            cameraElevation = tower.transform.position.z + 10;
         }
         else if (cameraElevation > tower.transform.position.z + tower.getHeight() * 2.0)
         {
@@ -124,7 +121,8 @@ public class Main : MonoBehaviour
         // CUSTOM EVENTS
         if (fallingObjectPowerupActive || arrowsPowerupActive || handPowerupActive)
         {
-            Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
+            var camera = targetCamera.GetComponent<Camera>();
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             var collider = tower.GetComponent<Collider>();
@@ -134,7 +132,7 @@ public class Main : MonoBehaviour
             {
                 Vector3 point = hit.point;
                 if (fallingObjectPowerupActive || arrowsPowerupActive)
-                {   
+                {
                     point.y += 2.0f;
                     marker.transform.position = point;
                 } else if (handPowerupActive)
@@ -148,6 +146,21 @@ public class Main : MonoBehaviour
                     this.CustomOnMouseDown();
                 }
             }
+        }
+    }
+
+    IEnumerator SpawnEnemy(Enemy enemyPattern)
+    {
+        while(true)
+        {
+            // Simulatee a random type of Enemy
+            Enemy enemy = Instantiate(enemyPattern) as Enemy;
+            enemy.setParentTower(tower);
+            enemy.setAngle(Mathf.PI / 16);
+
+            // Schedule next event
+            var time = -Mathf.Log(UnityEngine.Random.value) * enemyPattern.spawnTime;
+            yield return new WaitForSeconds(minSpawnOffset + time);
         }
     }
 
@@ -182,6 +195,7 @@ public class Main : MonoBehaviour
             hand = null;
         }
     }
+    
     public void CustomOnMouseDown()
     {
         Vector3 markerPosition = marker.transform.position;

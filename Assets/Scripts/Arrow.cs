@@ -25,7 +25,7 @@ public class Arrow : MonoBehaviour
 
         velocity.Normalize();
 
-        velocity *= 50f;
+        velocity *= 200f;
 
         var arrowBody = GetComponent<Rigidbody>();
 
