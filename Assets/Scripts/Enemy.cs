@@ -19,8 +19,11 @@ public class Enemy : MonoBehaviour
     private static float DEFAULT_INCOME = 100f;
 
     private Tower parent;
+    private Camera mainCamera;
+
     private Func<float, bool> OnJourneyCompleted;
     private Func<float, bool> OnDeath;
+    private Func<float, bool> OnPointed;
 
     // With angle, speed and reference tower dimensions
     // it should be enough to calculate this object's
@@ -98,6 +101,7 @@ public class Enemy : MonoBehaviour
             // Apply damage to player
             OnJourneyCompleted(attackDamage);
             Destroy(gameObject);
+            return;
 
         } else
         {
@@ -106,17 +110,36 @@ public class Enemy : MonoBehaviour
             angle += angularSpeed * delta;
         }
 
+        // See if player is aiming to this enemy
+        ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+
+        collider = GetComponent<Collider>();
+        var collision = collider.Raycast(ray, out hit, 100000f);
+
+        if (collision)
+        {
+            OnPointed(life);
+        }
     }
 
     // Getters and setters for this object
     public void setParentTower(Tower tower) {
         this.parent = tower;
     }
+    public void setMainCamera(Camera camera)
+    {
+        mainCamera = camera;
+    }
     public void setAngle(float angle) { this.angle = angle; }
 
-    public void setDelegates( Func<float, bool> onJourney, Func<float, bool> onDeath){
+    public void setDelegates(
+        Func<float, bool> onJourney,
+        Func<float, bool> onDeath,
+        Func<float, bool> onPointed
+    ){
         OnJourneyCompleted = onJourney;
         OnDeath = onDeath;
+        OnPointed = onPointed;
     }
 
     public void OnCollisionEnter(Collision collision)

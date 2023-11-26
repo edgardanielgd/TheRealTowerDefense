@@ -53,10 +53,14 @@ public class Main : MonoBehaviour
     // Player's life
     private float health;
 
+    // Show pointed enemy health
+    private float enemyHealth;
+
     private Tower tower;
     private GameObject marker;
     private Hand hand;
 
+    // Custom events 
     private bool OnEnemyJourney(float damage)
     {
         health -= damage;
@@ -72,6 +76,12 @@ public class Main : MonoBehaviour
     private bool OnEnemyDeath(float income)
     {
         rufianes += income;
+        return true;
+    }
+
+    private bool OnEmemyPointed(float life)
+    {
+        enemyHealth = life;
         return true;
     }
 
@@ -185,8 +195,9 @@ public class Main : MonoBehaviour
             // Simulatee a random type of Enemy
             Enemy enemy = Instantiate(enemyPattern) as Enemy;
             enemy.setParentTower(tower);
+            enemy.setMainCamera(targetCamera);
             enemy.setAngle(Mathf.PI / 16);
-            enemy.setDelegates(OnEnemyJourney, OnEnemyDeath);
+            enemy.setDelegates(OnEnemyJourney, OnEnemyDeath, OnEmemyPointed);
 
             // Schedule next event
             var time = -Mathf.Log(UnityEngine.Random.value) * enemyPattern.spawnTime;
@@ -334,6 +345,8 @@ public class Main : MonoBehaviour
     {
         this.fallingObjectPowerupActive = ! this.fallingObjectPowerupActive;
 
+        marker.SetActive(this.fallingObjectPowerupActive);
+
         // Disable any of other powerups
         this.arrowsPowerupActive = false;
         this.handPowerupActive = false;
@@ -344,6 +357,8 @@ public class Main : MonoBehaviour
     public void SwitchArrowsPowerup()
     {
         this.arrowsPowerupActive = !this.arrowsPowerupActive;
+
+        marker.SetActive(this.arrowsPowerupActive);
 
         // Disable any of other powerups
         this.fallingObjectPowerupActive = false;
@@ -361,6 +376,7 @@ public class Main : MonoBehaviour
         this.arrowsPowerupActive = false;
 
         // Instantiate hand object
+        marker.SetActive(false);
         if (this.handPowerupActive)
         {
             if(this.rufianes < handPattern.weaponCost) { 
