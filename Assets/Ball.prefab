@@ -143,3 +143,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d63843750ab50244ac1e5879f567408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weeaponCost: 30

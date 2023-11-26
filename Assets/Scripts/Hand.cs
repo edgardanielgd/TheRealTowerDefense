@@ -1,15 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class Hand : MonoBehaviour
+public class Hand : Weapon
 {
+
+    static float DEFAULT_HAND_LIFETIME = 2f;
+
+    public float handLifetime = DEFAULT_HAND_LIFETIME;
+
+    private Func<bool> OnDelete;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Invoke("DropHand", handLifetime);
+    }
+
+    void DropHand()
+    {
+        if (OnDelete != null)
+            OnDelete();
+    }
+
+    public void setDelegates(Func<bool> onDelete)
+    {
+        OnDelete = onDelete;
     }
 
     public void Posisionate(Vector3 cameraPosition, Vector3 targetPosition)
@@ -37,6 +56,11 @@ public class Hand : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print("Trigger");
+    }
+
+    public void DestroyHand()
+    {
+        Destroy(gameObject);
     }
 
     void OnCollisionEnter(Collision collision)

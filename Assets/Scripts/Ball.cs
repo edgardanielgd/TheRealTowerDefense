@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+public class Ball : Weapon
 {
     // Start is called before the first frame update
     private float life = 100;

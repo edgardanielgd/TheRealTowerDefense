@@ -13,7 +13,9 @@ public class Main : MonoBehaviour
      * */
     static Vector3 CAMERA_SPEED = new Vector3(0.5f, 0.03f, 1f);
     static int ARROWS_PER_BATCH = 1;
-    static float DEFAULT_INITIAl_HEALTH = 100;
+    static float DEFAULT_INITIAl_HEALTH = 100f;
+    static float DEFAULT_PERSISTENT_SCORE = 1f;
+    static float DEFAULT_PERSISTENT_TIME_OFFSET = 1f;
 
     // Reference main Prefab elements, represent patterns that
     // are initiallizable (must be public in order to be assignable)
@@ -29,6 +31,8 @@ public class Main : MonoBehaviour
 
     public float minSpawnOffset = 1f;
     public float maxHealth = DEFAULT_INITIAl_HEALTH;
+    public float persistentScore = DEFAULT_PERSISTENT_SCORE;
+    public float persistentTimeOffset = DEFAULT_PERSISTENT_TIME_OFFSET;
 
     // Target camera that rotates surrounding the target tower
     public Camera targetCamera;
@@ -108,6 +112,8 @@ public class Main : MonoBehaviour
         {
             StartCoroutine(SpawnEnemy(enemiesPatterns[i]));
         }
+
+        StartCoroutine(GivePersistentScore());
     }
 
     // Update is called once per frame
@@ -188,6 +194,16 @@ public class Main : MonoBehaviour
         }
     }
 
+    IEnumerator GivePersistentScore()
+    {
+        while(true)
+        {
+            rufianes += persistentScore;
+            yield return new WaitForSeconds(persistentTimeOffset);
+        }
+        
+    }
+
     void SetCameraPosition()
     {
         // Set camera position based on cylindrical coords
@@ -211,11 +227,16 @@ public class Main : MonoBehaviour
         );
     }
 
+    bool OnHandDelete()
+    {
+        SwitchHandPowerup();
+        return true;
+    }
     void ResetHand()
     {
-        if( hand)
+        if( hand )
         {
-            Destroy(hand);
+            hand.DestroyHand();
             hand = null;
         }
     }
@@ -227,6 +248,15 @@ public class Main : MonoBehaviour
 
         if (fallingObjectPowerupActive)
         {
+            if (this.rufianes < ballPattern.weaponCost)
+            {
+                return;
+            }
+            else
+            {
+                this.rufianes -= ballPattern.weaponCost;
+            }
+
             // Throw a rock at marker's position in XZ, high in Y
             var ball = Instantiate(ballPattern);
 
@@ -237,6 +267,15 @@ public class Main : MonoBehaviour
             );
         } else if (arrowsPowerupActive)
         {
+            if (this.rufianes < arrowPattern.weaponCost)
+            {
+                return;
+            }
+            else
+            {
+                this.rufianes -= arrowPattern.weaponCost;
+            }
+
             for (int i = 0; i < ARROWS_PER_BATCH; i++)
             {
                 var arrow = Instantiate(arrowPattern);
@@ -323,8 +362,14 @@ public class Main : MonoBehaviour
 
         // Instantiate hand object
         if (this.handPowerupActive)
+        {
+            if(this.rufianes < handPattern.weaponCost) { 
+                return; 
+            } else { this.rufianes -= handPattern.weaponCost; }
+
             hand = Instantiate(handPattern);
-        else
+            hand.setDelegates(OnHandDelete);
+        } else
             this.ResetHand();
     }
 }
