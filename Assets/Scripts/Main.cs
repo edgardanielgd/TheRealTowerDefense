@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
      * y: Factor for angle changes
      * z: Factor for elevation changes
      * */
-    static Vector3 CAMERA_SPEED = new Vector3(0.5f, 0.03f, 1f);
+    static Vector3 CAMERA_SPEED = new Vector3(0.5f, 0.01f, 1f);
     static int ARROWS_PER_BATCH = 1;
     static float DEFAULT_INITIAl_HEALTH = 100f;
     static float DEFAULT_PERSISTENT_SCORE = 1f;
@@ -91,7 +91,13 @@ public class Main : MonoBehaviour
     private bool OnEmemyPointed(float life)
     {
         enemyHealth = life;
+        Invoke("DettachEnemy", 1f);
         return true;
+    }
+
+    private void DettachEnemy()
+    {
+        enemyHealth = -1;
     }
 
     // Start is called before the first frame update
@@ -138,15 +144,16 @@ public class Main : MonoBehaviour
         StartCoroutine(GivePersistentScore());
 
         watch = Stopwatch.StartNew();
+
+        // ENEMY HEALTH
+
+        // Reset enemy health
+        //enemyHealth = -1f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // ENEMY HEALTH
-
-        // Reset enemy health
-        enemyHealth = -1f;
 
         // CAMERA 
 
